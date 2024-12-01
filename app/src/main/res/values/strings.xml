@@ -4,4 +4,9 @@
     <string name="play">Play</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+    <string name="text_points">Points</string>
+    <string name="score">0</string>
+    <string name="red">Red</string>
+    <string name="black">Black</string>
+    <string name="back">Back</string>
 </resources>

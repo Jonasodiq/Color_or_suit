@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context=".ActivityGame">
+
+    <!-- Title -->
+
+    <!-- Card container -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/kavoon"
+        android:letterSpacing="0.2"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/color_or_suit"
+        android:textColor="@color/blue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardImageContainer"
+        android:layout_width="@dimen/card_width"
+        android:layout_height="@dimen/card_height"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+
+        <!-- Card back -->
+        <ImageView
+            android:id="@+id/cardBack"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/back" />
+
+        <!-- Card front -->
+        <ImageView
+            android:id="@+id/cardFront"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Score text -->
+    <TextView
+        android:id="@+id/pointTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:letterSpacing="0.1"
+        android:text="@string/text_points"
+        android:fontFamily="@font/kavoon"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardImageContainer" />
+
+    <!-- Score -->
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/score"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/pointTextView"
+        app:layout_constraintTop_toBottomOf="@+id/cardImageContainer" />
+
+    <!-- Guess Buttons -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pointTextView">
+
+        <!-- Red button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/guessRedButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            app:cornerRadius="8dp"
+            android:backgroundTint="@color/red"
+            android:text="@string/red"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <!-- Black button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/guessBlackButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="8dp"
+            android:backgroundTint="@color/black"
+            android:text="@string/black"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Suit Icons -->
+    <LinearLayout
+        android:id="@+id/IconLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <!-- Hearts Icon -->
+        <ImageView
+            android:id="@+id/heartsIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/icon_bg"
+            android:padding="6dp"
+            android:src="@drawable/ic_heart" />
+
+        <!-- Diamonds Icon -->
+        <ImageView
+            android:id="@+id/diamondsIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/icon_bg"
+            android:padding="6dp"
+            android:src="@drawable/ic_diamonds" />
+
+        <!-- Clubs Icon -->
+        <ImageView
+            android:id="@+id/clubsIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/icon_bg"
+            android:padding="6dp"
+            android:src="@drawable/ic_clubs" />
+
+        <!-- Spades Icon -->
+        <ImageView
+            android:id="@+id/spadesIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/icon_bg"
+            android:padding="6dp"
+            android:src="@drawable/ic_spades" />
+    </LinearLayout>
+
+    <!-- Back Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/blue"
+        app:cornerRadius="8dp"
+        android:text="@string/back"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/IconLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

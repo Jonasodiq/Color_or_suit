@@ -5,4 +5,73 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"/>
+    android:background="@color/bg"
+    tools:context=".MainActivity">
+
+    <!-- App Title -->
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/kavoon"
+        android:text="@string/color_or_suit"
+        android:textAlignment="center"
+        android:letterSpacing="0.1"
+        android:textStyle="bold"
+        android:textColor="@color/blue"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Play Button -->
+
+    <!-- Settings Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        style="?attr/materialButtonStyle"
+        android:layout_width="106dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="@color/blue"
+        android:text="@string/play"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appTitle"
+
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settingsButton"
+        android:layout_width="106dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/settings"
+        android:backgroundTint="@color/blue"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+    />
+
+    <!-- About Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/aboutButton"
+        android:layout_width="106dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/about"
+        android:backgroundTint="@color/blue"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsButton"
+
+    />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

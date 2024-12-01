@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="50dp"
+    android:viewportWidth="90"
+    android:viewportHeight="100"
+    android:tint="?attr/cardBackgroundColor">
+    <path
+        android:fillColor="@android:color/holo_red_dark"
+        android:pathData="M50,29.74c.14-10.64,8.79-19.23,19.47-19.23,6.72,0,12.65,3.41,16.15,8.59,3.03,4.48,4.26,9.9,4.26,15.3,0,10.14-9.02,18.5-20.35,30.05-17.39,17.73-19.53,25.03-19.53,25.03,0,0-2.13-7.3-19.52-25.03-11.33-11.55-20.35-19.91-20.35-30.05,0-5.4,1.23-10.83,4.26-15.3,3.5-5.18,9.43-8.59,16.15-8.59,10.67,0,19.33,8.59,19.47,19.23"/>
+</vector>

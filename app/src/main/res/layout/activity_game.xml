@@ -9,8 +9,6 @@
     tools:context=".ActivityGame">
 
     <!-- Title -->
-
-    <!-- Card container -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
@@ -28,6 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Card container -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardImageContainer"
         android:layout_width="@dimen/card_width"
@@ -63,7 +62,6 @@
         android:letterSpacing="0.1"
         android:text="@string/text_points"
         android:fontFamily="@font/kavoon"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardImageContainer" />
@@ -95,7 +93,7 @@
 
         <!-- Red button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/guessRedButton"
+            android:id="@+id/redButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,7 +106,7 @@
 
         <!-- Black button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/guessBlackButton"
+            android:id="@+id/blackButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

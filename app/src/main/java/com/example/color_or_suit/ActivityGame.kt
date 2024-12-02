@@ -1,8 +1,11 @@
 package com.example.color_or_suit
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -39,5 +42,14 @@ class ActivityGame : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Link layout elements
+        val backButton = findViewById<Button>(R.id.backButton)
+        cardContainer = findViewById(R.id.cardImageContainer)
+        cardFront = findViewById(R.id.cardFront)
+        cardFront.setImageResource(R.drawable.back)
+
+        // functions button press
+        backButton.setOnClickListener { finish() }
     }
 }

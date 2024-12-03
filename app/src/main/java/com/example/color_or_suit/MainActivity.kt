@@ -1,5 +1,6 @@
 package com.example.color_or_suit
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +37,12 @@ class MainActivity : AppCompatActivity() {
             playButton.setOnClickListener {
                 runGameActivity()
             }
+
+            aboutButton.setOnClickListener {
+                showAboutDialog()
+            }
+
+
         } catch (e:Exception) {
             Log.e(TAG, "Error during initialization: ${e.message}", e)
         }
@@ -46,6 +53,15 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ActivityGame::class.java)
             startActivity(intent)
 
+    }
+
+    // Display dialog about the Game
+    private fun showAboutDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("About the Game")
+            .setMessage("This app is a game where you guess the suit or suit of the card. \n+1 point for the correct color.\n+5 points for the right suite.\n-1 for mistakes.\n21 points for win If you have above than 21 points you lose. Have fun!")
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
 }

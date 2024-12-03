@@ -1,6 +1,11 @@
 package com.example.color_or_suit
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -86,12 +91,18 @@ class ActivityGame : AppCompatActivity() {
 
     // Click methods
     private fun handleButtonClick(guess: String, scoreIncrement: Int, scoreTextView: TextView) {
-        if (isGuessCorrect(guess)) {
-            updateScore(scoreIncrement, scoreTextView)
-        } else {
-            updateScore(-1, scoreTextView)
+        flipToFront {
+            if (isGuessCorrect(guess)) {
+                updateScore(scoreIncrement, scoreTextView)
+            } else {
+                updateScore(-1, scoreTextView)
+            }
+
+            // Vänta en stund innan vi döljer kortet igen
+            cardContainer.postDelayed({
+                flipToBack()
+            }, 1000)
         }
-        updateCardImage()
     }
 
     // Update card
@@ -133,4 +144,61 @@ class ActivityGame : AppCompatActivity() {
 
     }
 
+    // Animation to front
+    private fun flipToFront(onFlipEnd: () -> Unit) {
+        val animeToFront = ObjectAnimator.ofFloat(cardContainer, "scaleX", 1f, 0f).apply {
+            interpolator = DecelerateInterpolator()
+            duration = 300
+        }
+
+        val animeToBack = ObjectAnimator.ofFloat(cardContainer, "scaleX", 0f, 1f).apply {
+            interpolator = AccelerateInterpolator()
+            duration = 300
+        }
+
+        animeToFront.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                updateCardImage() // Update the card image
+                animeToBack.start() // Start the next part
+            }
+        })
+
+        animeToBack.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                onFlipEnd() // Run further after the front page is displayed
+            }
+        })
+        animeToFront.start()
+    }
+
+    // Animation to back
+    private fun flipToBack(onFlipEnd: (() -> Unit)? = null) {
+        val animeToFront = ObjectAnimator.ofFloat(cardContainer, "scaleX", 1f, 0f).apply {
+            interpolator = DecelerateInterpolator()
+            duration = 300
+        }
+
+        val animeToBack = ObjectAnimator.ofFloat(cardContainer, "scaleX", 0f, 1f).apply {
+            interpolator = AccelerateInterpolator()
+            duration = 300
+        }
+
+        animeToFront.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                cardFront.setImageResource(R.drawable.back)
+                animeToBack.start()
+            }
+        })
+
+        animeToBack.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                onFlipEnd?.invoke()
+            }
+        })
+        animeToFront.start()
+    }
 }

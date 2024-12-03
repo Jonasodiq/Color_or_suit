@@ -3,11 +3,13 @@ package com.example.color_or_suit
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlin.random.Random
 
 class ActivityGame : AppCompatActivity() {
 
@@ -32,6 +34,9 @@ class ActivityGame : AppCompatActivity() {
 
     private lateinit var cardContainer: CardView
     private lateinit var cardFront: ImageView
+
+    var score = 0
+    var currentCardIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,4 +83,54 @@ class ActivityGame : AppCompatActivity() {
 
         backButton.setOnClickListener { finish() }
     }
+
+    // Click methods
+    private fun handleButtonClick(guess: String, scoreIncrement: Int, scoreTextView: TextView) {
+        if (isGuessCorrect(guess)) {
+            updateScore(scoreIncrement, scoreTextView)
+        } else {
+            updateScore(-1, scoreTextView)
+        }
+        updateCardImage()
+    }
+
+    // Update card
+    private fun updateCardImage() {
+        currentCardIndex = Random.nextInt(cards.size)
+        val newCard = cards[currentCardIndex]
+        cardFront.setImageResource(newCard.first) // Set the image for the new card
+    }
+
+    // Check if the guess is correct
+    private fun isGuessCorrect(guess: String): Boolean {
+        val cardSuit = cards[currentCardIndex].second
+        return when (guess) {
+              "Red" -> cardSuit == "Hearts" || cardSuit == "Diamonds"
+            "Black" -> cardSuit == "Clover" || cardSuit == "Spades"
+               else -> cardSuit ==  guess
+        }
+    }
+
+    // Update score
+    private fun updateScore(value: Int, scoreView: TextView) {
+        score += value
+        scoreView.text = "$score"
+
+        // Check if wins or loses
+        when {
+            score == 21 -> endGame(true) // wins exactly 21
+            score  > 21 || score < 0 -> endGame(false)  // otherwise lose
+        }
+    }
+
+    // End the game
+    private fun endGame(isWin: Boolean) {
+        finish()
+        if (!isWin) {
+            finish()
+        }
+
+
+    }
+
 }

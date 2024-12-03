@@ -170,7 +170,6 @@ class ActivityGame : AppCompatActivity() {
                 onFlipEnd() // Run further after the front page is displayed
             }
         })
-
         animeToFront.start()
     }
 
@@ -200,7 +199,6 @@ class ActivityGame : AppCompatActivity() {
                 onFlipEnd?.invoke()
             }
         })
-
         animeToFront.start()
     }
 }

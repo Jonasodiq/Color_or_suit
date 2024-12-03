@@ -44,10 +44,17 @@ class ActivityGame : AppCompatActivity() {
         }
 
         // Link layout elements
+        val scoreView = findViewById<TextView>(R.id.score)
+        val redButton = findViewById<Button>(R.id.redButton)
+        val blackButton = findViewById<Button>(R.id.blackButton)
+        val heartButton = findViewById<ImageView>(R.id.heartsIcon)
+        val diamondButton = findViewById<ImageView>(R.id.diamondsIcon)
+        val clubButton = findViewById<ImageView>(R.id.clubsIcon)
+        val spadeButton = findViewById<ImageView>(R.id.spadesIcon)
         val backButton = findViewById<Button>(R.id.backButton)
+
         cardContainer = findViewById(R.id.cardImageContainer)
         cardFront = findViewById(R.id.cardFront)
-        cardFront.setImageResource(R.drawable.back)
 
         // functions button press
         redButton.setOnClickListener {

@@ -9,25 +9,24 @@
     tools:context=".ActivityGame">
 
     <!-- Title -->
-
-    <!-- Card container -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/kavoon"
         android:letterSpacing="0.2"
         android:lineSpacingExtra="8sp"
-        android:text="@string/color_or_suit"
+        android:text="@string/colorOrSuit"
         android:textColor="@color/blue"
-        android:textSize="16sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Card container -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardImageContainer"
         android:layout_width="@dimen/card_width"
@@ -63,7 +62,6 @@
         android:letterSpacing="0.1"
         android:text="@string/text_points"
         android:fontFamily="@font/kavoon"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardImageContainer" />
@@ -95,7 +93,7 @@
 
         <!-- Red button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/guessRedButton"
+            android:id="@+id/redButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,7 +106,7 @@
 
         <!-- Black button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/guessBlackButton"
+            android:id="@+id/blackButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,12 +1,21 @@
 package com.example.color_or_suit
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
+
+    private val TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -16,5 +25,27 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        try { // link-> https://www.w3schools.com/java/java_try_catch.asp
+
+            val playButton = findViewById<MaterialButton>(R.id.playButton)
+            val settingsButton = findViewById<Button>(R.id.settingsButton)
+            val aboutButton = findViewById<Button>(R.id.aboutButton)
+
+            // ClickListener
+            playButton.setOnClickListener {
+                runGameActivity()
+            }
+        } catch (e:Exception) {
+            Log.e(TAG, "Error during initialization: ${e.message}", e)
+        }
     }
+
+    private fun runGameActivity() {
+
+            val intent = Intent(this, ActivityGame::class.java)
+            startActivity(intent)
+
+    }
+
 }

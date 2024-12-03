@@ -50,6 +50,25 @@ class ActivityGame : AppCompatActivity() {
         cardFront.setImageResource(R.drawable.back)
 
         // functions button press
+        redButton.setOnClickListener {
+            handleButtonClick("Red", +1, scoreView)
+        }
+        blackButton.setOnClickListener {
+            handleButtonClick("Black", +1, scoreView)
+        }
+        heartButton.setOnClickListener {
+            handleButtonClick("Hearts", +5, scoreView)
+        }
+        diamondButton.setOnClickListener {
+            handleButtonClick("Diamonds", +5, scoreView)
+        }
+        clubButton.setOnClickListener {
+            handleButtonClick("Clover", +5, scoreView)
+        }
+        spadeButton.setOnClickListener {
+            handleButtonClick("Spades", +5, scoreView)
+        }
+
         backButton.setOnClickListener { finish() }
     }
 }

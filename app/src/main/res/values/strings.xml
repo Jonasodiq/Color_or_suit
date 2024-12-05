@@ -10,4 +10,26 @@
     <string name="red">Red</string>
     <string name="black">Black</string>
     <string name="back">Back</string>
+
+    <!-- Svårighetsnivåer -->
+    <string-array name="difficulty_levels">
+        <item>Enkel</item>
+        <item>Medel</item>
+        <item>Svår</item>
+    </string-array>
+    <string-array name="difficulty_values">
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
+    </string-array>
+
+    <!-- Tema -->
+    <string-array name="theme_options">
+        <item>Ljust</item>
+        <item>Mörkt</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
 </resources>

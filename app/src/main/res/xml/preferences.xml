@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Svårighetsnivå -->
+    <ListPreference
+        android:key="difficulty"
+        android:title="Svårighetsnivå"
+        android:summary="Välj mellan Enkel, Medel och Svår"
+        android:entries="@array/difficulty_levels"
+        android:entryValues="@array/difficulty_values"
+        android:defaultValue="medium" />
+
+    <!-- Ljud På/Av -->
+    <SwitchPreferenceCompat
+        android:key="sound"
+        android:title="Ljud"
+        android:summary="Slå på eller av ljud"
+        android:defaultValue="true" />
+
+    <!-- Tema -->
+    <ListPreference
+        android:key="theme"
+        android:title="Tema"
+        android:summary="Välj appens tema"
+        android:entries="@array/theme_options"
+        android:entryValues="@array/theme_values"
+        android:defaultValue="light" />
+</PreferenceScreen>

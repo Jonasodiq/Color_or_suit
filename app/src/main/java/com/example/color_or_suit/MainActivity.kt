@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
                 runGameActivity()
             }
 
+            settingsButton.setOnClickListener {
+                openSettings()
+            }
+
             aboutButton.setOnClickListener {
                 showAboutDialog()
             }
@@ -53,6 +57,15 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ActivityGame::class.java)
             startActivity(intent)
 
+    }
+
+    private fun openSettings() {
+        try {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.i(TAG, "Could not start SettingsActivity.")
+        }
     }
 
     // Display dialog about the Game

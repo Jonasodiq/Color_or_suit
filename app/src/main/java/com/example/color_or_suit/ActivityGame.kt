@@ -3,6 +3,7 @@ package com.example.color_or_suit
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -129,20 +130,41 @@ class ActivityGame : AppCompatActivity() {
 
         // Check if wins or loses
         when {
-            score == 21 -> endGame(true) // wins exactly 21
-            score  > 21 || score < 0 -> endGame(false)  // otherwise lose
+            score == 21 -> displayResult(true) // wins exactly 21
+            score  > 21 || score < 0 -> displayResult(false)
         }
     }
 
-    // End the game
-    private fun endGame(isWin: Boolean) {
-        finish()
-        if (!isWin) {
-            finish()
+    // Display the result
+    private fun displayResult(isWin: Boolean) {
+        val message = if (isWin) {
+            getString(R.string.win_message)
+        } else {
+            getString(R.string.lose_message)
         }
 
-
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.game_over_title))
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+                resetGame()
+            }
+            .setNegativeButton(getString(R.string.exit)) { _, _ ->
+                finish()
+            }
+            // Prevent the dialog from closing by tapping outside it
+            .setCancelable(false)
+            .show()
     }
+
+    // Reset the game
+    private fun resetGame() {
+        score = 0
+        findViewById<TextView>(R.id.score).text = "$score" // Reset the score
+        updateCardImage() // update a new card
+    }
+
+
 
     // Animation to front
     private fun flipToFront(onFlipEnd: () -> Unit) {

@@ -5,10 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
@@ -70,9 +68,9 @@ class MainActivity : AppCompatActivity() {
 
     // Display dialog about the Game
     private fun showAboutDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_about, null)
         AlertDialog.Builder(this)
-            .setTitle("About the Game")
-            .setMessage("This app is a game where you guess the suit or suit of the card. \n+1 point for the correct color.\n+5 points for the right suite.\n-1 for mistakes.\n21 points for win If you have above than 21 points you lose. Have fun!")
+            .setView(dialogView)
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }

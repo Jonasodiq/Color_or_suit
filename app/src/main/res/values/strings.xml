@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Color_or_suit</string>
-    <string name="color_or_suit">Color\nor Suit</string>
+    <string name="app_title">Color\nor Suit</string>
     <string name="colorOrSuit">Color or Suit</string>
     <string name="play">Play</string>
     <string name="settings">Settings</string>
@@ -11,11 +11,24 @@
     <string name="black">Black</string>
     <string name="back">Back</string>
 
-    <!-- Svårighetsnivåer -->
+    <!-- About -->
+    <string name="about_the_game">About the Game</string>
+    <string name="dsc_the_game">
+        This app is a game where you guess the suit or suit of the card.\n
+        +1 point for the correct color.\n
+        +5 points for the right suit.\n
+        -1 for mistakes.\n
+        21 points for win. If you have under 0 or above than 21 points, you lose.\n
+        Have fun!
+    </string>
+
+    <!-- Difficulty levels -->
+    <string name="difficulty_title">Difficulty level</string>
+    <string name="difficulty_dsc">Choose between Easy, Medium and Hard</string>
     <string-array name="difficulty_levels">
-        <item>Enkel</item>
-        <item>Medel</item>
-        <item>Svår</item>
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
     </string-array>
     <string-array name="difficulty_values">
         <item>easy</item>
@@ -23,10 +36,16 @@
         <item>hard</item>
     </string-array>
 
-    <!-- Tema -->
+    <!-- Sound -->
+    <string name="sound_title">Sound</string>
+    <string name="sound_dsc">Turn the sound on or off</string>
+
+    <!-- Theme -->
+    <string name="theme_title">Theme</string>
+    <string name="theme_dsc">Choose the theme</string>
     <string-array name="theme_options">
-        <item>Ljust</item>
-        <item>Mörkt</item>
+        <item>light</item>
+        <item>dark</item>
     </string-array>
     <string-array name="theme_values">
         <item>light</item>
@@ -39,7 +58,6 @@
     <string name="lose_message">Sorry, you lost. Try again!</string>
     <string name="play_again">Play Again</string>
     <string name="exit">Exit</string>
-
 
 
 </resources>

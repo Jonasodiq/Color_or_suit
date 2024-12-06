@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_medium">16dp</dimen>
-    <dimen name="margin_large">32dp</dimen>
+    <dimen name="X_small">6dp</dimen>
+    <dimen name="small">8dp</dimen>
+    <dimen name="medium">16dp</dimen>
+    <dimen name="large">24dp</dimen>
+    <dimen name="Xlarge">32dp</dimen>
+    <dimen name="XX_large">56dp</dimen>
+    <dimen name="XXX_large">104dp</dimen>
+
+    <dimen name="tz_small">8sp</dimen>
+    <dimen name="tz_large">20sp</dimen>
+    <dimen name="tz_Xlarge">34sp</dimen>
+
     <dimen name="card_width">150dp</dimen>
     <dimen name="card_height">200dp</dimen>
+
     <dimen name="icon_size">48dp</dimen>
 </resources>

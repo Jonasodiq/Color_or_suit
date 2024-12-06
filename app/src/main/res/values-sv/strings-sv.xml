@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Test-3</string>
+    <string name="score">0</string>
+    <string name="back">Tillbaks</string>
+    <string name="black">Svart</string>
+    <string name="red">Röd</string>
+    <string name="app_title">Färg\neller Svit</string>
+    <string name="settings">Inställningar</string>
+    <string name="about">Om spelet</string>
+    <string name="colorOrSuit">Färg / Svit</string>
+    <string name="text_points">Poäng</string>
+    <string name="play">Start</string>
+
+    <!-- About -->
+    <string name="about_the_game">Om spelet</string>
+    <string name="dsc_the_game">
+        Den här appen är ett spel där du gissar kortets färg eller svit.\n
+         +1 poäng för rätt färg.\n
+         +5 poäng för rätt svit.\n
+         -1 för misstag.\n
+         21 poäng för vinst. Om du har under 0 eller över 21 poäng förlorar du.\n
+         Ha roligt!
+    </string>
+
+    <!-- Svårighetsnivåer -->
+    <string name="difficulty_title">Svårighetsnivå</string>
+    <string name="difficulty_dsc">Välj mellan Enkel, Medel och Svår</string>
+    <string-array name="difficulty_levels">
+        <item>Enkel</item>
+        <item>Medel</item>
+        <item>Svår</item>
+    </string-array>
+    <string-array name="difficulty_values">
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
+    </string-array>
+
+    <string name="sound_title">Ljud</string>
+    <string name="sound_dsc">Slå på eller av ljudet</string>
+
+    <!-- Tema -->
+    <string name="theme_title">Tema</string>
+    <string name="theme_dsc">Välj appens tema</string>
+    <string-array name="theme_options">
+        <item>Ljust</item>
+        <item>Mörkt</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+    <!-- Result_sv-->
+    <string name="game_over_title">Spel över</string>
+    <string name="win_message">Grattis! Du vann spelet med exakt 21 poäng!</string>
+    <string name="lose_message">Tyvärr, du förlorade. Försök igen!</string>
+    <string name="play_again">Spela igen</string>
+    <string name="exit">Avsluta</string>
+
+</resources>

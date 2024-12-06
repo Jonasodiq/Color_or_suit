@@ -9,13 +9,13 @@
         android:id="@+id/dialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="About the Game"
+        android:text="@string/about_the_game"
         android:textAppearance="?attr/textAppearanceHeadline6" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="This app is a game where you guess the suit or color of the card..."
+        android:text="@string/dsc_the_game"
         android:textAppearance="?attr/textAppearanceBody2" />
 </LinearLayout>

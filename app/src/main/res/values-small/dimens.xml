@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Main -->
+    <!-- Margin_top -->
+    <dimen name="margin_top">150dp</dimen>
+    <!-- Title -->
+    <dimen name="app_title_size">56sp</dimen>
+    <!-- Buttons -->
+    <dimen name="btn_width">132dp</dimen>
+    <dimen name="btn_height">56dp</dimen>
+    <dimen name="btn_text">20sp</dimen>
+
+
+    <!-- Game -->
+    <!-- Margin_top -->
+    <dimen name="game_margin_top">100dp</dimen>
+    <!-- Score -->
+    <dimen name="score_num">16sp</dimen>
+    <!-- Buttons -->
+    <dimen name="game_btn_width">76dp</dimen>
+    <dimen name="game_btn_height">46dp</dimen>
+    <dimen name="game_btn_text">20sp</dimen>
+    <!-- Icons -->
+    <dimen name="icon_size">48dp</dimen>
+
+
+    <!-- Cards -->
+    <dimen name="card_width">100dp</dimen>
+    <dimen name="card_height">200dp</dimen>
+
+
+</resources>

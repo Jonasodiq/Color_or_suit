@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context=".ActivityGame">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/game_margin_top"
+        android:fontFamily="@font/kavoon"
+        android:letterSpacing="0.2"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/colorOrSuit"
+        android:textColor="@color/blue"
+        android:textSize="96sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Card BigContainer -->
+    <LinearLayout
+        android:id="@+id/big_container"
+        android:layout_width="1249dp"
+        android:layout_height="694dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <!-- Card Container-1 -->
+
+        <!-- Spacer -->
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+            app:layout_constraintHorizontal_bias="0.523"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+
+            <LinearLayout
+                android:id="@+id/buttonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="50dp"
+                android:orientation="vertical">
+
+
+                <!-- Red button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/redButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="@dimen/btn_width"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/red"
+                    android:text="@string/red"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    app:cornerRadius="16dp"
+                    android:textSize="40sp"/>
+                <!-- Space -->
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+
+                <!-- Black button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/blackButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="@dimen/btn_width"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_marginTop="24dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/black"
+                    android:text="@string/black"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    app:cornerRadius="16dp"
+                    android:textSize="40sp"/>
+            </LinearLayout>
+
+            <!-- Icons -->
+            <LinearLayout
+                android:id="@+id/IconLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Hearts Icon -->
+                <ImageView
+                    android:id="@+id/heartsIcon"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/icon_bg"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_heart" />
+
+                <!-- Diamonds Icon -->
+                <ImageView
+                    android:id="@+id/diamondsIcon"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/icon_bg"
+                    android:src="@drawable/ic_diamonds" />
+
+                <!-- Clubs Icon -->
+                <ImageView
+                    android:id="@+id/clubsIcon"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/icon_bg"
+                    android:src="@drawable/ic_clubs" />
+
+                <!-- Spades Icon -->
+                <ImageView
+                    android:id="@+id/spadesIcon"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/icon_bg"
+                    android:src="@drawable/ic_spades" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Card Container-2 -->
+
+        <!-- Spacer -->
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+
+            <!-- Score -->
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/score"
+                android:textSize="196sp"
+                android:textStyle="bold" />
+
+            <!-- Score text -->
+            <TextView
+                android:id="@+id/pointTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:fontFamily="@font/kavoon"
+                android:letterSpacing="0.1"
+                android:text="@string/text_points"
+                android:textSize="44sp" />
+
+            <!-- Back Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButton"
+                android:layout_width="@dimen/btn_width"
+                android:layout_height="@dimen/btn_height"
+                android:backgroundTint="@color/blue"
+                android:text="@string/back"
+                android:textColor="@android:color/white"
+                android:textSize="44sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Card container-3 -->
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="50dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+
+            <!-- ImageCard -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardImageContainer"
+                android:layout_width="@dimen/card_width"
+                android:layout_height="@dimen/card_height"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                tools:layout_editor_absoluteX="134dp"
+                tools:layout_editor_absoluteY="151dp">
+
+                <!-- Card back -->
+                <ImageView
+                    android:id="@+id/cardBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/back" />
+
+                <!-- Card front -->
+                <ImageView
+                    android:id="@+id/cardFront"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Guess Buttons -->
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

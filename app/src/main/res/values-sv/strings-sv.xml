@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Main -->
+    <!-- Margin_top -->
     <string name="app_name">Test-3</string>
     <string name="score">0</string>
-    <string name="back">Tillbaks</string>
+    <string name="back">Tillbaka</string>
     <string name="black">Svart</string>
     <string name="red">Röd</string>
     <string name="app_title">Färg\neller Svit</string>

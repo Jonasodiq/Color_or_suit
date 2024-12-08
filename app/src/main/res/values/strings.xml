@@ -1,4 +1,7 @@
 <resources>
+
+    <!-- Main -->
+    <!-- Margin_top -->
     <string name="app_name">Color_or_suit</string>
     <string name="app_title">Color\nor Suit</string>
     <string name="colorOrSuit">Color or Suit</string>
@@ -58,6 +61,5 @@
     <string name="lose_message">Sorry, you lost. Try again!</string>
     <string name="play_again">Play Again</string>
     <string name="exit">Exit</string>
-
 
 </resources>

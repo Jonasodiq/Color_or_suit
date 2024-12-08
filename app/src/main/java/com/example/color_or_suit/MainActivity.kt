@@ -32,18 +32,9 @@ class MainActivity : AppCompatActivity() {
             val aboutButton = findViewById<Button>(R.id.aboutButton)
 
             // ClickListener
-            playButton.setOnClickListener {
-                runGameActivity()
-            }
-
-            settingsButton.setOnClickListener {
-                openSettings()
-            }
-
-            aboutButton.setOnClickListener {
-                showAboutDialog()
-            }
-
+            playButton.setOnClickListener  { runGameActivity() }
+            settingsButton.setOnClickListener { openSettings() }
+            aboutButton.setOnClickListener { showAboutDialog() }
 
         } catch (e:Exception) {
             Log.e(TAG, "Error during initialization: ${e.message}", e)
@@ -54,7 +45,6 @@ class MainActivity : AppCompatActivity() {
 
             val intent = Intent(this, ActivityGame::class.java)
             startActivity(intent)
-
     }
 
     private fun openSettings() {
@@ -74,5 +64,4 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }
-
 }

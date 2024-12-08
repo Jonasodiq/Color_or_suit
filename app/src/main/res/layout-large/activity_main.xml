@@ -10,33 +10,34 @@
     tools:context=".MainActivity">
 
     <!-- App Title -->
+
+    <!-- Play Button -->
     <TextView
         android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="252dp"
         android:fontFamily="@font/kavoon"
+        android:letterSpacing="0.1"
         android:text="@string/app_title"
         android:textAlignment="center"
-        android:letterSpacing="0.1"
-        android:textStyle="bold"
         android:textColor="@color/blue"
-        android:textSize="@dimen/app_title_size"
+        android:textSize="48sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-    />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Play Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/playButton"
-        android:layout_width="@dimen/btn_width"
-        android:layout_height="@dimen/btn_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:backgroundTint="@color/blue"
         android:text="@string/play"
+        android:textSize="36sp"
         android:textStyle="bold"
-        android:textSize="@dimen/btn_text"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,13 +47,13 @@
     <!-- Settings Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
-        android:layout_width="@dimen/btn_width"
-        android:layout_height="@dimen/btn_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/settings"
+        android:textSize="36sp"
         android:backgroundTint="@color/blue"
         android:textStyle="bold"
-        android:textSize="@dimen/btn_text"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,13 +63,13 @@
     <!-- About Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/aboutButton"
-        android:layout_width="@dimen/btn_width"
-        android:layout_height="@dimen/btn_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/about"
+        android:textSize="36sp"
         android:backgroundTint="@color/blue"
         android:textStyle="bold"
-        android:textSize="@dimen/btn_text"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

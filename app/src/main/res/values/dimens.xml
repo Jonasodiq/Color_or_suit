@@ -7,7 +7,7 @@
     <!-- Title -->
     <dimen name="app_title_size">48sp</dimen>
     <!-- Buttons -->
-    <dimen name="btn_width">132dp</dimen>
+    <dimen name="btn_width">152dp</dimen>
     <dimen name="btn_height">56dp</dimen>
     <dimen name="btn_text">20sp</dimen>
 

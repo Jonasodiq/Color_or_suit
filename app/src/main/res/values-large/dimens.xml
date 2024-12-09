@@ -7,12 +7,10 @@
     <!-- Title -->
     <dimen name="app_title_size">34sp</dimen>
     <!-- Buttons -->
-    <dimen name="button_text_size">36sp</dimen>
 
 
     <!-- Game -->
     <!-- Score -->
-    <dimen name="score_text_size">16sp</dimen> <!--  -->
     <!-- Icons -->
     <dimen name="icon_size">48dp</dimen>
 

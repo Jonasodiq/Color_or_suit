@@ -5,12 +5,12 @@
     <!-- Margin_top -->
     <string name="app_name">Test-3</string>
     <string name="score">0</string>
-    <string name="back">Tillbaka</string>
+    <string name="back">Meny</string>
     <string name="black">Svart</string>
     <string name="red">Röd</string>
     <string name="app_title">Färg\neller Svit</string>
-    <string name="settings">Inställningar</string>
-    <string name="about">Om spelet</string>
+    <string name="settings">Inställning</string>
+    <string name="about">Regler</string>
     <string name="colorOrSuit">Färg / Svit</string>
     <string name="text_points">Poäng</string>
     <string name="play">Start</string>

@@ -3,6 +3,8 @@
 
 Color or Suit Game is an Android app where players guess the color or suit of a card to score points. The game is simple yet challenging and offers a fun experience for all ages.
 
+![Color or Suit Game App](https:)
+
 ## Features
 
 - **Play**: Guess the color (red or black) or suit (hearts, diamonds, clubs, spades) of a card.
@@ -28,12 +30,6 @@ Color or Suit Game is an Android app where players guess the color or suit of a 
 - **Score**: See your current score at the top of the screen.
 - **Settings**: Go to the settings menu to customize the game.
 - **About**: Learn more about the game by tapping the "About" button.
-
-## Småle
-
-- **Utvecklare**: Jonas N
-- **Version**: 1.0.0
-- **Plattform**: Android
 
 ## Projects in Development
 

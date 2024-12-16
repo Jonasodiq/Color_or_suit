@@ -18,10 +18,10 @@
     <string name="about_the_game">About the Game</string>
     <string name="dsc_the_game">
         This app is a game where you guess the suit or suit of the card.\n
-        +1 point for the correct color.\n
-        +5 points for the right suit.\n
-        -1 for mistakes.\n
-        21 points for win. If you have under 0 or above than 21 points, you lose.\n
+        * +1 point for the correct color.\n
+        * +5 points for the right suit.\n
+        * -1 for mistakes.\n
+        * 21 points for win. If you have under 0 or above than 21 points, you lose.\n
         Have fun!
     </string>
 

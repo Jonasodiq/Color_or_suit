@@ -5,6 +5,10 @@ Color or Suit Game is an Android app where players guess the color or suit of a 
 
 ![Color or Suit Game App](https://github.com/Jonasodiq/Color_or_suit/blob/main/app-img.jpg)
 
+## Appbild
+
+<img src="path/to/app_image.png" alt="Appbild" width="400" height="400">
+
 ## Features
 
 - **Play**: Guess the color (red or black) or suit (hearts, diamonds, clubs, spades) of a card.
@@ -42,6 +46,9 @@ Color or Suit Game is an Android app where players guess the color or suit of a 
 - **View the design sketch on Figma: Sketch**
    ```bash
       https://www.figma.com/design/0SNhz9pbfg5JuEQESuAly7/Untitled?node-id=0-1&t=euFXdwTPnThEPwEb-1
+
+## App image
+<img src="https://github.com/Jonasodiq/Color_or_suit/blob/main/app-img.jpg" alt="Appbild" width="400" height="400">
 
 ## Contributing
 

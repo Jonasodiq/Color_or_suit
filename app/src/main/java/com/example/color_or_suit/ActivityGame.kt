@@ -31,6 +31,7 @@ import com.example.color_or_suit.ui.theme.CardBlack
 import com.example.color_or_suit.ui.theme.CardRed
 import com.example.color_or_suit.ui.theme.ColorOrSuitTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ActivityGame : ComponentActivity() {
 
@@ -80,9 +81,9 @@ fun GameScreen(
     onBackClick: () -> Unit
 ) {
     var isFlipped by remember { mutableStateOf(false) }
-    var buttonsEnabled by remember { mutableStateOf(true) }
     var showGameOverDialog by remember { mutableStateOf(false) }
     var isWin by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     // 3D-kortvändning via rotationY
     val rotation by animateFloatAsState(
@@ -91,11 +92,7 @@ fun GameScreen(
         label = "CardFlipAnimation"
     )
 
-    // Hantera gissningar
     fun handleGuess(guess: String, increment: Int) {
-        if (!buttonsEnabled) return
-        buttonsEnabled = false
-
         viewModel.pickRandomCard()
         soundManager.play(SoundManager.SoundType.CARD_FLIP)
         isFlipped = true
@@ -124,19 +121,10 @@ fun GameScreen(
             showGameOverDialog = true
         }
 
-        // Vänta 1 sekund och vänd sedan tillbaka kortet
-        kotlinx.coroutines.MainScope().run {
-            // Använd LaunchedEffect-mönster via delay
-        }
-    }
-
-    // Timer för att vända tillbaka kortet
-    LaunchedEffect(isFlipped) {
-        if (isFlipped) {
-            delay(1200)
+        // Vänd tillbaka kortet efter 1 sekund
+        scope.launch {
+            delay(1000)
             isFlipped = false
-            delay(350) // Vänta tills vändningen är klar
-            buttonsEnabled = true
         }
     }
 
@@ -180,7 +168,7 @@ fun GameScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    // Kortsidan: Framsida (spegelvänd så att kortet inte visas bakochfram)
+                    // Kortsidan: Framsida
                     val cardRes = viewModel.cards[viewModel.currentCardIndex].first
                     Image(
                         painter = painterResource(id = cardRes),
@@ -212,14 +200,13 @@ fun GameScreen(
                 )
             }
 
-            // Färg-knappar (Röd / Svart)
+            // Färg-knappar (Röd / Svart) - alltid klickbara!
             Row(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
                     onClick = { handleGuess("Red", 1) },
-                    enabled = buttonsEnabled,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = CardRed),
                     modifier = Modifier.size(width = 110.dp, height = 50.dp)
@@ -234,7 +221,6 @@ fun GameScreen(
 
                 Button(
                     onClick = { handleGuess("Black", 1) },
-                    enabled = buttonsEnabled,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = CardBlack),
                     modifier = Modifier.size(width = 110.dp, height = 50.dp)
@@ -248,7 +234,7 @@ fun GameScreen(
                 }
             }
 
-            // Svit-ikoner (+5 poäng)
+            // Svit-ikoner (+5 poäng) - alltid klickbara!
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -256,25 +242,21 @@ fun GameScreen(
                 SuitButton(
                     iconRes = R.drawable.ic_heart,
                     contentDesc = "Hearts",
-                    enabled = buttonsEnabled,
                     onClick = { handleGuess("Hearts", 5) }
                 )
                 SuitButton(
                     iconRes = R.drawable.ic_diamonds,
                     contentDesc = "Diamonds",
-                    enabled = buttonsEnabled,
                     onClick = { handleGuess("Diamonds", 5) }
                 )
                 SuitButton(
                     iconRes = R.drawable.ic_clubs,
                     contentDesc = "Clubs",
-                    enabled = buttonsEnabled,
                     onClick = { handleGuess("Clubs", 5) }
                 )
                 SuitButton(
                     iconRes = R.drawable.ic_spades,
                     contentDesc = "Spades",
-                    enabled = buttonsEnabled,
                     onClick = { handleGuess("Spades", 5) }
                 )
             }
@@ -321,7 +303,6 @@ fun GameScreen(
                         onClick = {
                             viewModel.resetGame()
                             isFlipped = false
-                            buttonsEnabled = true
                             showGameOverDialog = false
                         }
                     ) {
@@ -342,7 +323,6 @@ fun GameScreen(
 fun SuitButton(
     iconRes: Int,
     contentDesc: String,
-    enabled: Boolean,
     onClick: () -> Unit
 ) {
     Surface(
@@ -352,7 +332,7 @@ fun SuitButton(
         modifier = Modifier
             .size(54.dp)
             .clip(RoundedCornerShape(12.dp))
-            .clickable(enabled = enabled, onClick = onClick)
+            .clickable(onClick = onClick)
     ) {
         Box(
             modifier = Modifier

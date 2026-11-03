@@ -16,7 +16,7 @@
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="Settings"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+            android:theme="@style/Theme.Color_or_suit.Settings"/>
         <activity
             android:name=".ActivityGame"
             android:exported="false" />

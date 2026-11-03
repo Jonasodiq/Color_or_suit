@@ -4,12 +4,19 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontLoadingStrategy
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.color_or_suit.R
 
+// Använd Async loading strategy så att appen ALDRIG kraschar om Play Services inte har fonten lokalt,
+// och lägg till Serif som fallback-font.
 val KavoonFontFamily = FontFamily(
-    Font(R.font.kavoon, FontWeight.Normal)
+    Font(
+        resId = R.font.kavoon,
+        weight = FontWeight.Normal,
+        loadingStrategy = FontLoadingStrategy.Async
+    )
 )
 
 val Typography = Typography(

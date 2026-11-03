@@ -81,7 +81,11 @@ class ActivityGame : AppCompatActivity() {
             val isCorrect = viewModel.isGuessCorrect(guess)
             if (isCorrect) {
                 viewModel.updateScore(scoreIncrement)
-                soundManager.play(SoundManager.SoundType.CORRECT)
+                if (scoreIncrement == 5) {
+                    soundManager.play(SoundManager.SoundType.CORRECT_SUIT)
+                } else {
+                    soundManager.play(SoundManager.SoundType.CORRECT)
+                }
             } else {
                 viewModel.updateScore(-1)
                 soundManager.play(SoundManager.SoundType.WRONG)

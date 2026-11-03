@@ -13,6 +13,7 @@ class SoundManager(private val context: Context) {
     enum class SoundType {
         CARD_FLIP,
         CORRECT,
+        CORRECT_SUIT, // +5 poäng (jackpot-ljud)
         WRONG,
         WIN,
         LOSE
@@ -29,11 +30,12 @@ class SoundManager(private val context: Context) {
             .setAudioAttributes(audioAttributes)
             .build()
 
-        soundMap[SoundType.CARD_FLIP] = soundPool.load(context, R.raw.card_flip, 1)
-        soundMap[SoundType.CORRECT]   = soundPool.load(context, R.raw.correct, 1)
-        soundMap[SoundType.WRONG]     = soundPool.load(context, R.raw.wrong, 1)
-        soundMap[SoundType.WIN]       = soundPool.load(context, R.raw.win, 1)
-        soundMap[SoundType.LOSE]      = soundPool.load(context, R.raw.lose, 1)
+        soundMap[SoundType.CARD_FLIP]    = soundPool.load(context, R.raw.card_flip, 1)
+        soundMap[SoundType.CORRECT]      = soundPool.load(context, R.raw.correct, 1)
+        soundMap[SoundType.CORRECT_SUIT] = soundPool.load(context, R.raw.correct_suit, 1)
+        soundMap[SoundType.WRONG]        = soundPool.load(context, R.raw.wrong, 1)
+        soundMap[SoundType.WIN]          = soundPool.load(context, R.raw.win, 1)
+        soundMap[SoundType.LOSE]         = soundPool.load(context, R.raw.lose, 1)
     }
 
     private fun isSoundEnabled(): Boolean {

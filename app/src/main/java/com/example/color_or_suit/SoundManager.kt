@@ -34,7 +34,7 @@ class SoundManager(private val context: Context) {
         soundMap[SoundType.CORRECT]      = soundPool.load(context, R.raw.correct, 1)
         soundMap[SoundType.CORRECT_SUIT] = soundPool.load(context, R.raw.correct_suit, 1)
         soundMap[SoundType.WRONG]        = soundPool.load(context, R.raw.wrong, 1)
-        soundMap[SoundType.WIN]          = soundPool.load(context, R.raw.win, 1)
+        soundMap[SoundType.WIN]          = soundPool.load(context, R.raw.wind, 1)
         soundMap[SoundType.LOSE]         = soundPool.load(context, R.raw.lose, 1)
     }
 

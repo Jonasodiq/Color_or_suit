@@ -40,6 +40,7 @@ class ActivityGame : AppCompatActivity() {
 
     private lateinit var cardContainer: CardView
     private lateinit var cardFront: ImageView
+    private lateinit var guessButtons: List<android.view.View>
 
     var score = 0
     var currentCardIndex = 0
@@ -67,6 +68,9 @@ class ActivityGame : AppCompatActivity() {
         cardContainer = findViewById(R.id.cardImageContainer)
         cardFront = findViewById(R.id.cardFront)
 
+        // Samla alla gissningsknappar i en lista
+        guessButtons = listOf(redButton, blackButton, heartButton, diamondButton, clubButton, spadeButton)
+
         // functions button press
         redButton.setOnClickListener {
             handleButtonClick("Red", +1, scoreView)
@@ -92,6 +96,7 @@ class ActivityGame : AppCompatActivity() {
 
     // Click methods
     private fun handleButtonClick(guess: String, scoreIncrement: Int, scoreTextView: TextView) {
+        setButtonsEnabled(false)
         flipToFront {
             if (isGuessCorrect(guess)) {
                 updateScore(scoreIncrement, scoreTextView)
@@ -101,9 +106,16 @@ class ActivityGame : AppCompatActivity() {
 
             // Vänta en stund innan vi döljer kortet igen
             cardContainer.postDelayed({
-                flipToBack()
+                flipToBack {
+                    setButtonsEnabled(true)
+                }
             }, 1000)
         }
+    }
+
+    // Aktivera/inaktivera alla gissningsknappar
+    private fun setButtonsEnabled(enabled: Boolean) {
+        guessButtons.forEach { it.isEnabled = enabled }
     }
 
     // Update card

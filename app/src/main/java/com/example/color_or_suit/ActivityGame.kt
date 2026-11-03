@@ -132,7 +132,7 @@ class ActivityGame : AppCompatActivity() {
     // Display the result
     private fun displayResult(isWin: Boolean) {
         val message = if (isWin) {
-            getString(R.string.win_message, viewModel.difficulty.targetScore)
+            getString(R.string.win_message, viewModel.score)
         } else {
             getString(R.string.lose_message)
         }

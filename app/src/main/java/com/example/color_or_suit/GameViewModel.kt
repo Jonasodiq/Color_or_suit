@@ -60,7 +60,12 @@ class GameViewModel : ViewModel() {
         score += value
     }
 
-    fun isWin(): Boolean = score == difficulty.targetScore
+    fun isWin(): Boolean {
+        return when (difficulty) {
+            Difficulty.EASY -> score in 15..18 // 15, 16, 17, 18 vinner alla direkt på Easy!
+            Difficulty.MEDIUM, Difficulty.HARD -> score == difficulty.targetScore
+        }
+    }
 
     fun isGameOver(): Boolean = score > difficulty.maxScore || score < difficulty.minScore
 

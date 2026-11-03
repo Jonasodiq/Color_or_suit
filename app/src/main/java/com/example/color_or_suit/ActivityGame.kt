@@ -39,6 +39,10 @@ class ActivityGame : AppCompatActivity() {
 
         soundManager = SoundManager(this)
 
+        // Hämta vald svårighetsgrad från Inställningar
+        val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
+        viewModel.setDifficultyFromPreference(prefs.getString("difficulty", "medium"))
+
         // Link layout elements
         scoreView     = findViewById(R.id.score)
         val redButton     = findViewById<Button>(R.id.redButton)
@@ -95,13 +99,13 @@ class ActivityGame : AppCompatActivity() {
             }
             scoreView.text = viewModel.score.toString()
 
-            // Kontrollera vinst/förlust
+            // Kontrollera vinst/förlust baserat på svårighetsgrad
             when {
-                viewModel.score == 21 -> {
+                viewModel.isWin() -> {
                     soundManager.play(SoundManager.SoundType.WIN)
                     displayResult(true)
                 }
-                viewModel.score > 21 || viewModel.score < 0 -> {
+                viewModel.isGameOver() -> {
                     soundManager.play(SoundManager.SoundType.LOSE)
                     displayResult(false)
                 }
@@ -127,7 +131,11 @@ class ActivityGame : AppCompatActivity() {
 
     // Display the result
     private fun displayResult(isWin: Boolean) {
-        val message = if (isWin) getString(R.string.win_message) else getString(R.string.lose_message)
+        val message = if (isWin) {
+            getString(R.string.win_message, viewModel.difficulty.targetScore)
+        } else {
+            getString(R.string.lose_message)
+        }
 
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.game_over_title))

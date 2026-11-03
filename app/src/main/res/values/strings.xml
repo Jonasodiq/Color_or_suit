@@ -57,7 +57,7 @@
 
     <!-- Result -->
     <string name="game_over_title">Game Over</string>
-    <string name="win_message">Congratulations! You won the game with exactly 21 points!</string>
+    <string name="win_message">Congratulations! You won the game with %1$d points!</string>
     <string name="lose_message">Sorry, you lost. Try again!</string>
     <string name="play_again">Play Again</string>
     <string name="exit">Exit</string>

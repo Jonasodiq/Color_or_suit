@@ -9,7 +9,6 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -92,8 +91,7 @@ fun GameScreen(
         label = "CardFlipAnimation"
     )
 
-    // Hantera gissningar med Coroutine delay
-    val coroutineScope = rememberCoroutineScope()
+    // Hantera gissningar
     fun handleGuess(guess: String, increment: Int) {
         if (!buttonsEnabled) return
         buttonsEnabled = false

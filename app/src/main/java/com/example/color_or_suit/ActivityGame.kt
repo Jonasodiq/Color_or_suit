@@ -20,10 +20,10 @@ import kotlin.random.Random
 class ActivityGame : AppCompatActivity() {
 
     private val cards = listOf(
-        Pair(R.drawable.clubs_10, "Clover"),
-        Pair(R.drawable.clubs_j, "Clover"),
-        Pair(R.drawable.clubs_k, "Clover"),
-        Pair(R.drawable.clubs_q, "Clover"),
+        Pair(R.drawable.clubs_10, "Clubs"),
+        Pair(R.drawable.clubs_j, "Clubs"),
+        Pair(R.drawable.clubs_k, "Clubs"),
+        Pair(R.drawable.clubs_q, "Clubs"),
         Pair(R.drawable.diamonds_10, "Diamonds"),
         Pair(R.drawable.diamonds_j, "Diamonds"),
         Pair(R.drawable.diamonds_k, "Diamonds"),
@@ -81,7 +81,7 @@ class ActivityGame : AppCompatActivity() {
             handleButtonClick("Diamonds", +5, scoreView)
         }
         clubButton.setOnClickListener {
-            handleButtonClick("Clover", +5, scoreView)
+            handleButtonClick("Clubs", +5, scoreView)
         }
         spadeButton.setOnClickListener {
             handleButtonClick("Spades", +5, scoreView)
@@ -118,7 +118,7 @@ class ActivityGame : AppCompatActivity() {
         val cardSuit = cards[currentCardIndex].second
         return when (guess) {
               "Red" -> cardSuit == "Hearts" || cardSuit == "Diamonds"
-            "Black" -> cardSuit == "Clover" || cardSuit == "Spades"
+            "Black" -> cardSuit == "Clubs" || cardSuit == "Spades"
                else -> cardSuit ==  guess
         }
     }

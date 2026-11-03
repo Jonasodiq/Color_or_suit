@@ -15,14 +15,18 @@
     <string name="back">Back</string>
 
     <!-- About -->
-    <string name="about_the_game">About the Game</string>
+    <string name="about_the_game">Rules &amp; Scoring</string>
     <string name="dsc_the_game">
-        This app is a game where you guess the suit or suit of the card.\n
-        * +1 point for the correct color.\n
-        * +5 points for the right suit.\n
-        * -1 for mistakes.\n
-        * 21 points for win. If you have under 0 or above than 21 points, you lose.\n
-        Have fun!
+Guess the card color or suit to win!\n\n
+Scoring:\n
+• +1 point for correct color (Red / Black)\n
+• +5 points for correct suit (♥ ♦ ♣ ♠)\n
+• -1 point for incorrect guess\n\n
+Difficulty Levels:\n
+• Easy: Win at 15–18 points. Loss only if score drops below -3.\n
+• Medium: Win at exactly 21 points. Loss if score drops below 0 or above 21.\n
+• Hard: Win at exactly 31 points. Loss if score drops below 0 or above 31.\n\n
+Have fun!
     </string>
 
     <!-- Difficulty levels -->

@@ -16,14 +16,18 @@
     <string name="play">Start</string>
 
     <!-- About -->
-    <string name="about_the_game">Regler</string>
+    <string name="about_the_game">Regler &amp; Poäng</string>
     <string name="dsc_the_game">
-        Den här appen är ett spel där du gissar kortets färg eller svit.\n
-         * +1 poäng för rätt färg.\n
-         * +5 poäng för rätt svit.\n
-         * -1 för misstag.\n
-         * 21 poäng för vinst. Om du har under 0 eller över 21 poäng förlorar du.\n
-         Ha roligt!
+Gissa kortets färg eller svit för att vinna!\n\n
+Poäng:\n
+• +1 poäng för rätt färg (Röd / Svart)\n
+• +5 poäng för rätt svit (♥ ♦ ♣ ♠)\n
+• -1 poäng vid felaktig gissning\n\n
+Svårighetsnivåer:\n
+• Enkel: Vinst vid 15–18 poäng. Förlust endast om poängen hamnar under -3.\n
+• Medel: Vinst vid exakt 21 poäng. Förlust under 0 eller över 21.\n
+• Svår: Vinst vid exakt 31 poäng. Förlust under 0 eller över 31.\n\n
+Ha roligt!
     </string>
 
     <!-- Svårighetsnivåer -->

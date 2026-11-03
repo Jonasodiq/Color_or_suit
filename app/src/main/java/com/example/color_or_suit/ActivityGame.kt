@@ -60,7 +60,7 @@ class ActivityGame : ComponentActivity() {
                     viewModel = viewModel,
                     soundManager = soundManager,
                     onBackClick = {
-                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
                         finish()
                     }
                 )
@@ -100,17 +100,11 @@ fun GameScreen(
         val correct = viewModel.isGuessCorrect(guess)
         if (correct) {
             viewModel.updateScore(increment)
-            if (increment == 5) {
-                soundManager.play(SoundManager.SoundType.CORRECT_SUIT)
-            } else {
-                soundManager.play(SoundManager.SoundType.CORRECT)
-            }
         } else {
             viewModel.updateScore(-1)
-            soundManager.play(SoundManager.SoundType.WRONG)
         }
 
-        // Kontrollera vinst/förlust
+        // Kontrollera vinst/förlust först – spela BARA ETT ljud!
         if (viewModel.isWin()) {
             isWin = true
             soundManager.play(SoundManager.SoundType.WIN)
@@ -119,6 +113,17 @@ fun GameScreen(
             isWin = false
             soundManager.play(SoundManager.SoundType.LOSE)
             showGameOverDialog = true
+        } else {
+            // Spelet fortsätter: spela rätt- eller fel-ljud
+            if (correct) {
+                if (increment == 5) {
+                    soundManager.play(SoundManager.SoundType.CORRECT_SUIT)
+                } else {
+                    soundManager.play(SoundManager.SoundType.CORRECT)
+                }
+            } else {
+                soundManager.play(SoundManager.SoundType.WRONG)
+            }
         }
 
         // Vänd tillbaka kortet efter 1 sekund
@@ -200,7 +205,7 @@ fun GameScreen(
                 )
             }
 
-            // Färg-knappar (Röd / Svart) - alltid klickbara!
+            // Färg-knappar (Röd / Svart)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -234,7 +239,7 @@ fun GameScreen(
                 }
             }
 
-            // Svit-ikoner (+5 poäng) - alltid klickbara!
+            // Svit-ikoner (+5 poäng)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically

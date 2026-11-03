@@ -43,15 +43,15 @@ class MainActivity : ComponentActivity() {
             ColorOrSuitTheme(darkTheme = darkTheme) {
                 MainScreen(
                     onPlayClick = {
-                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
                         startActivity(Intent(this, ActivityGame::class.java))
                     },
                     onSettingsClick = {
-                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
                         startActivity(Intent(this, SettingsActivity::class.java))
                     },
                     onButtonClick = {
-                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
                     }
                 )
             }

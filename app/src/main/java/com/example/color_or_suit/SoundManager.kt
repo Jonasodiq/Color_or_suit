@@ -45,11 +45,16 @@ class SoundManager(private val context: Context) {
         return prefs.getBoolean("sound", true)
     }
 
-    fun play(soundType: SoundType) {
+    /**
+     * Spela upp ett ljud med valbar volym (mellan 0.0f och 1.0f).
+     * För klickljud: använd t.ex. volume = 0.35f för ett lagom dämpat klick.
+     */
+    fun play(soundType: SoundType, volume: Float = 1.0f) {
         if (!isSoundEnabled()) return
 
         val soundId = soundMap[soundType] ?: return
-        soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
+        val clampedVolume = volume.coerceIn(0.0f, 1.0f)
+        soundPool.play(soundId, clampedVolume, clampedVolume, 1, 0, 1f)
     }
 
     fun release() {

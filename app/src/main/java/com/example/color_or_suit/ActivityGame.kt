@@ -66,7 +66,10 @@ class ActivityGame : AppCompatActivity() {
         clubButton.setOnClickListener   { handleButtonClick("Clubs",    +5) }
         spadeButton.setOnClickListener  { handleButtonClick("Spades",   +5) }
 
-        backButton.setOnClickListener { finish() }
+        backButton.setOnClickListener {
+            soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+            finish()
+        }
     }
 
     override fun onDestroy() {

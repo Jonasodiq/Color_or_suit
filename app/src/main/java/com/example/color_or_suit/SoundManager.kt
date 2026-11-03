@@ -11,6 +11,7 @@ class SoundManager(private val context: Context) {
     private val soundMap = mutableMapOf<SoundType, Int>()
 
     enum class SoundType {
+        BUTTON_CLICK,
         CARD_FLIP,
         CORRECT,
         CORRECT_SUIT, // +5 poäng (jackpot-ljud)
@@ -30,6 +31,7 @@ class SoundManager(private val context: Context) {
             .setAudioAttributes(audioAttributes)
             .build()
 
+        soundMap[SoundType.BUTTON_CLICK]= soundPool.load(context, R.raw.click, 1)
         soundMap[SoundType.CARD_FLIP]    = soundPool.load(context, R.raw.card_flip, 1)
         soundMap[SoundType.CORRECT]      = soundPool.load(context, R.raw.correct, 1)
         soundMap[SoundType.CORRECT_SUIT] = soundPool.load(context, R.raw.correct_suit, 1)

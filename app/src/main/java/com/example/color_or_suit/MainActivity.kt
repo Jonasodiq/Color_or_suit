@@ -14,6 +14,7 @@ import com.google.android.material.button.MaterialButton
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
+    private lateinit var soundManager: SoundManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        soundManager = SoundManager(this)
+
         try { // link-> https://www.w3schools.com/java/java_try_catch.asp
 
             val playButton = findViewById<MaterialButton>(R.id.playButton)
@@ -32,13 +35,27 @@ class MainActivity : AppCompatActivity() {
             val aboutButton = findViewById<Button>(R.id.aboutButton)
 
             // ClickListener
-            playButton.setOnClickListener  { runGameActivity() }
-            settingsButton.setOnClickListener { openSettings() }
-            aboutButton.setOnClickListener { showAboutDialog() }
+            playButton.setOnClickListener {
+                soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+                runGameActivity()
+            }
+            settingsButton.setOnClickListener {
+                soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+                openSettings()
+            }
+            aboutButton.setOnClickListener {
+                soundManager.play(SoundManager.SoundType.BUTTON_CLICK)
+                showAboutDialog()
+            }
 
         } catch (e:Exception) {
             Log.e(TAG, "Error during initialization: ${e.message}", e)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        soundManager.release()
     }
 
     private fun runGameActivity() {

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="red">#FF4D4D</color>
+    <color name="blue">#40B0FF</color>
+    <!-- Mörk bakgrundsfärg för nattläge -->
+    <color name="bg">#121B22</color>
+</resources>

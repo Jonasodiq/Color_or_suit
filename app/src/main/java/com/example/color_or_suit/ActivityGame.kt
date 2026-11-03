@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat
 class ActivityGame : AppCompatActivity() {
 
     private val viewModel: GameViewModel by viewModels()
+    private lateinit var soundManager: SoundManager
 
     private lateinit var cardContainer: CardView
     private lateinit var cardFront: ImageView
@@ -35,6 +36,8 @@ class ActivityGame : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        soundManager = SoundManager(this)
 
         // Link layout elements
         scoreView     = findViewById(R.id.score)
@@ -66,21 +69,35 @@ class ActivityGame : AppCompatActivity() {
         backButton.setOnClickListener { finish() }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        soundManager.release()
+    }
+
     // Click methods
     private fun handleButtonClick(guess: String, scoreIncrement: Int) {
         setButtonsEnabled(false)
         flipToFront {
-            if (viewModel.isGuessCorrect(guess)) {
+            val isCorrect = viewModel.isGuessCorrect(guess)
+            if (isCorrect) {
                 viewModel.updateScore(scoreIncrement)
+                soundManager.play(SoundManager.SoundType.CORRECT)
             } else {
                 viewModel.updateScore(-1)
+                soundManager.play(SoundManager.SoundType.WRONG)
             }
             scoreView.text = viewModel.score.toString()
 
             // Kontrollera vinst/förlust
             when {
-                viewModel.score == 21              -> displayResult(true)
-                viewModel.score > 21 || viewModel.score < 0 -> displayResult(false)
+                viewModel.score == 21 -> {
+                    soundManager.play(SoundManager.SoundType.WIN)
+                    displayResult(true)
+                }
+                viewModel.score > 21 || viewModel.score < 0 -> {
+                    soundManager.play(SoundManager.SoundType.LOSE)
+                    displayResult(false)
+                }
             }
 
             // Vänta en stund innan vi döljer kortet igen
@@ -135,6 +152,7 @@ class ActivityGame : AppCompatActivity() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
                 updateCardImage()
+                soundManager.play(SoundManager.SoundType.CARD_FLIP)
                 animeToBack.start()
             }
         })

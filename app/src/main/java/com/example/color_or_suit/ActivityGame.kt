@@ -11,39 +11,20 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import kotlin.random.Random
 
 class ActivityGame : AppCompatActivity() {
 
-    private val cards = listOf(
-        Pair(R.drawable.clubs_10, "Clubs"),
-        Pair(R.drawable.clubs_j, "Clubs"),
-        Pair(R.drawable.clubs_k, "Clubs"),
-        Pair(R.drawable.clubs_q, "Clubs"),
-        Pair(R.drawable.diamonds_10, "Diamonds"),
-        Pair(R.drawable.diamonds_j, "Diamonds"),
-        Pair(R.drawable.diamonds_k, "Diamonds"),
-        Pair(R.drawable.diamonds_q, "Diamonds"),
-        Pair(R.drawable.heart_10, "Hearts"),
-        Pair(R.drawable.heart_j, "Hearts"),
-        Pair(R.drawable.heart_k, "Hearts"),
-        Pair(R.drawable.heart_q, "Hearts"),
-        Pair(R.drawable.spades_10, "Spades"),
-        Pair(R.drawable.spades_j, "Spades"),
-        Pair(R.drawable.spades_k, "Spades"),
-        Pair(R.drawable.spades_q, "Spades"),
-    )
+    private val viewModel: GameViewModel by viewModels()
 
     private lateinit var cardContainer: CardView
     private lateinit var cardFront: ImageView
+    private lateinit var scoreView: TextView
     private lateinit var guessButtons: List<android.view.View>
-
-    var score = 0
-    var currentCardIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,59 +37,55 @@ class ActivityGame : AppCompatActivity() {
         }
 
         // Link layout elements
-        val scoreView = findViewById<TextView>(R.id.score)
-        val redButton = findViewById<Button>(R.id.redButton)
-        val blackButton = findViewById<Button>(R.id.blackButton)
-        val heartButton = findViewById<ImageView>(R.id.heartsIcon)
+        scoreView     = findViewById(R.id.score)
+        val redButton     = findViewById<Button>(R.id.redButton)
+        val blackButton   = findViewById<Button>(R.id.blackButton)
+        val heartButton   = findViewById<ImageView>(R.id.heartsIcon)
         val diamondButton = findViewById<ImageView>(R.id.diamondsIcon)
-        val clubButton = findViewById<ImageView>(R.id.clubsIcon)
-        val spadeButton = findViewById<ImageView>(R.id.spadesIcon)
-        val backButton = findViewById<Button>(R.id.backButton)
+        val clubButton    = findViewById<ImageView>(R.id.clubsIcon)
+        val spadeButton   = findViewById<ImageView>(R.id.spadesIcon)
+        val backButton    = findViewById<Button>(R.id.backButton)
 
         cardContainer = findViewById(R.id.cardImageContainer)
-        cardFront = findViewById(R.id.cardFront)
+        cardFront     = findViewById(R.id.cardFront)
 
         // Samla alla gissningsknappar i en lista
         guessButtons = listOf(redButton, blackButton, heartButton, diamondButton, clubButton, spadeButton)
 
+        // Återställ poäng i UI vid skärmrotation
+        scoreView.text = viewModel.score.toString()
+
         // functions button press
-        redButton.setOnClickListener {
-            handleButtonClick("Red", +1, scoreView)
-        }
-        blackButton.setOnClickListener {
-            handleButtonClick("Black", +1, scoreView)
-        }
-        heartButton.setOnClickListener {
-            handleButtonClick("Hearts", +5, scoreView)
-        }
-        diamondButton.setOnClickListener {
-            handleButtonClick("Diamonds", +5, scoreView)
-        }
-        clubButton.setOnClickListener {
-            handleButtonClick("Clubs", +5, scoreView)
-        }
-        spadeButton.setOnClickListener {
-            handleButtonClick("Spades", +5, scoreView)
-        }
+        redButton.setOnClickListener    { handleButtonClick("Red",      +1) }
+        blackButton.setOnClickListener  { handleButtonClick("Black",    +1) }
+        heartButton.setOnClickListener  { handleButtonClick("Hearts",   +5) }
+        diamondButton.setOnClickListener{ handleButtonClick("Diamonds", +5) }
+        clubButton.setOnClickListener   { handleButtonClick("Clubs",    +5) }
+        spadeButton.setOnClickListener  { handleButtonClick("Spades",   +5) }
 
         backButton.setOnClickListener { finish() }
     }
 
     // Click methods
-    private fun handleButtonClick(guess: String, scoreIncrement: Int, scoreTextView: TextView) {
+    private fun handleButtonClick(guess: String, scoreIncrement: Int) {
         setButtonsEnabled(false)
         flipToFront {
-            if (isGuessCorrect(guess)) {
-                updateScore(scoreIncrement, scoreTextView)
+            if (viewModel.isGuessCorrect(guess)) {
+                viewModel.updateScore(scoreIncrement)
             } else {
-                updateScore(-1, scoreTextView)
+                viewModel.updateScore(-1)
+            }
+            scoreView.text = viewModel.score.toString()
+
+            // Kontrollera vinst/förlust
+            when {
+                viewModel.score == 21              -> displayResult(true)
+                viewModel.score > 21 || viewModel.score < 0 -> displayResult(false)
             }
 
             // Vänta en stund innan vi döljer kortet igen
             cardContainer.postDelayed({
-                flipToBack {
-                    setButtonsEnabled(true)
-                }
+                flipToBack { setButtonsEnabled(true) }
             }, 1000)
         }
     }
@@ -118,65 +95,30 @@ class ActivityGame : AppCompatActivity() {
         guessButtons.forEach { it.isEnabled = enabled }
     }
 
-    // Update card
+    // Update card image from ViewModel state
     private fun updateCardImage() {
-        currentCardIndex = Random.nextInt(cards.size)
-        val newCard = cards[currentCardIndex]
-        cardFront.setImageResource(newCard.first) // Set the image for the new card
-    }
-
-    // Check if the guess is correct
-    private fun isGuessCorrect(guess: String): Boolean {
-        val cardSuit = cards[currentCardIndex].second
-        return when (guess) {
-              "Red" -> cardSuit == "Hearts" || cardSuit == "Diamonds"
-            "Black" -> cardSuit == "Clubs" || cardSuit == "Spades"
-               else -> cardSuit ==  guess
-        }
-    }
-
-    // Update score
-    private fun updateScore(value: Int, scoreView: TextView) {
-        score += value
-        scoreView.text = "$score"
-
-        // Check if wins or loses
-        when {
-            score == 21 -> displayResult(true) // wins exactly 21
-            score  > 21 || score < 0 -> displayResult(false)
-        }
+        viewModel.pickRandomCard()
+        cardFront.setImageResource(viewModel.cards[viewModel.currentCardIndex].first)
     }
 
     // Display the result
     private fun displayResult(isWin: Boolean) {
-        val message = if (isWin) {
-            getString(R.string.win_message)
-        } else {
-            getString(R.string.lose_message)
-        }
+        val message = if (isWin) getString(R.string.win_message) else getString(R.string.lose_message)
 
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.game_over_title))
             .setMessage(message)
-            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
-                resetGame()
-            }
-            .setNegativeButton(getString(R.string.exit)) { _, _ ->
-                finish()
-            }
-            // Prevent the dialog from closing by tapping outside it
+            .setPositiveButton(getString(R.string.play_again)) { _, _ -> resetGame() }
+            .setNegativeButton(getString(R.string.exit))       { _, _ -> finish() }
             .setCancelable(false)
             .show()
     }
 
     // Reset the game
     private fun resetGame() {
-        score = 0
-        findViewById<TextView>(R.id.score).text = "$score" // Reset the score
-        updateCardImage() // update a new card
+        viewModel.resetGame()
+        scoreView.text = viewModel.score.toString()
     }
-
-
 
     // Animation to front
     private fun flipToFront(onFlipEnd: () -> Unit) {
@@ -184,7 +126,6 @@ class ActivityGame : AppCompatActivity() {
             interpolator = DecelerateInterpolator()
             duration = 300
         }
-
         val animeToBack = ObjectAnimator.ofFloat(cardContainer, "scaleX", 0f, 1f).apply {
             interpolator = AccelerateInterpolator()
             duration = 300
@@ -193,15 +134,14 @@ class ActivityGame : AppCompatActivity() {
         animeToFront.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
-                updateCardImage() // Update the card image
-                animeToBack.start() // Start the next part
+                updateCardImage()
+                animeToBack.start()
             }
         })
-
         animeToBack.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
-                onFlipEnd() // Run further after the front page is displayed
+                onFlipEnd()
             }
         })
         animeToFront.start()
@@ -213,7 +153,6 @@ class ActivityGame : AppCompatActivity() {
             interpolator = DecelerateInterpolator()
             duration = 300
         }
-
         val animeToBack = ObjectAnimator.ofFloat(cardContainer, "scaleX", 0f, 1f).apply {
             interpolator = AccelerateInterpolator()
             duration = 300
@@ -226,7 +165,6 @@ class ActivityGame : AppCompatActivity() {
                 animeToBack.start()
             }
         })
-
         animeToBack.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)

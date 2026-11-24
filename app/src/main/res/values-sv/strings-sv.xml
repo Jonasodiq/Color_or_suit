@@ -61,6 +61,13 @@ Ha roligt!
 
     <!-- Result_sv-->
     <string name="game_over_title">Spel över</string>
+    <string name="high_score">Högsta poäng: %1$d</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Välkommen till Färg eller Svit!</string>
+    <string name="onboarding_message">Gissa kortets färg eller svit för att tjäna poäng. Tryck på en färg- eller svit-knapp för att göra din gissning. Lycka till!</string>
+    <string name="onboarding_got_it">Förstått!</string>
+
     <string name="win_message">Grattis! Du vann spelet med %1$d poäng!</string>
     <string name="lose_message">Tyvärr, du förlorade. Försök igen!</string>
     <string name="play_again">Spela igen</string>

@@ -65,5 +65,11 @@ Have fun!
     <string name="lose_message">Sorry, you lost. Try again!</string>
     <string name="play_again">Play Again</string>
     <string name="exit">Exit</string>
+    <string name="high_score">High Score: %1$d</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Welcome to Color or Suit!</string>
+    <string name="onboarding_message">Guess the card color or suit to earn points. Tap a color or suit button to make your guess. Good luck!</string>
+    <string name="onboarding_got_it">Got it!</string>
 
 </resources>

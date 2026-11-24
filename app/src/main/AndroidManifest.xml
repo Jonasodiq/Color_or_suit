@@ -15,8 +15,8 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:label="Settings"
-            android:theme="@style/Theme.Color_or_suit.Settings"/>
+            android:label="@string/settings"
+            android:theme="@style/Theme.Color_or_suit"/>
         <activity
             android:name=".ActivityGame"
             android:exported="false" />

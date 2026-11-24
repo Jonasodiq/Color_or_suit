@@ -1,5 +1,7 @@
 package com.example.color_or_suit
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import kotlin.random.Random
 
@@ -35,6 +37,13 @@ class GameViewModel : ViewModel() {
     var score = 0
     var currentCardIndex = 0
 
+    // High score per difficulty
+    private var highScores: MutableMap<Difficulty, Int> = mutableMapOf(
+        Difficulty.EASY to 0,
+        Difficulty.MEDIUM to 0,
+        Difficulty.HARD to 0
+    )
+
     fun setDifficultyFromPreference(pref: String?) {
         difficulty = when (pref?.lowercase()) {
             "easy" -> Difficulty.EASY
@@ -58,11 +67,16 @@ class GameViewModel : ViewModel() {
 
     fun updateScore(value: Int) {
         score += value
+        // Update high score if current score is higher
+        val currentHigh = highScores[difficulty] ?: 0
+        if (score > currentHigh) {
+            highScores[difficulty] = score
+        }
     }
 
     fun isWin(): Boolean {
         return when (difficulty) {
-            Difficulty.EASY -> score in 15..18 // 15, 16, 17, 18 vinner alla direkt på Easy!
+            Difficulty.EASY -> score in 15..18
             Difficulty.MEDIUM, Difficulty.HARD -> score == difficulty.targetScore
         }
     }
@@ -72,5 +86,29 @@ class GameViewModel : ViewModel() {
     fun resetGame() {
         score = 0
         pickRandomCard()
+    }
+
+    fun getHighScore(difficulty: Difficulty = this.difficulty): Int {
+        return highScores[difficulty] ?: 0
+    }
+
+    fun loadHighScores(context: Context) {
+        val prefs = context.getSharedPreferences("high_scores", Context.MODE_PRIVATE)
+        highScores[Difficulty.EASY] = prefs.getInt("high_score_easy", 0)
+        highScores[Difficulty.MEDIUM] = prefs.getInt("high_score_medium", 0)
+        highScores[Difficulty.HARD] = prefs.getInt("high_score_hard", 0)
+    }
+
+    fun saveHighScores(context: Context) {
+        val prefs = context.getSharedPreferences("high_scores", Context.MODE_PRIVATE).edit()
+        highScores.forEach { (difficulty, score) ->
+            val key = when (difficulty) {
+                Difficulty.EASY -> "high_score_easy"
+                Difficulty.MEDIUM -> "high_score_medium"
+                Difficulty.HARD -> "high_score_hard"
+            }
+            prefs.putInt(key, score)
+        }
+        prefs.apply()
     }
 }

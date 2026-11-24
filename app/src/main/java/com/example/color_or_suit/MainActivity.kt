@@ -2,6 +2,8 @@ package com.example.color_or_suit
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -71,6 +75,23 @@ fun MainScreen(
     onButtonClick: () -> Unit
 ) {
     var showAboutDialog by remember { mutableStateOf(false) }
+    var showOnboardingDialog by remember { mutableStateOf(false) }
+    val view = LocalView.current
+    val context = LocalContext.current
+
+    fun performHaptic() {
+        view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+    }
+
+    // Visa onboarding-dialog första gången appen öppnas
+    androidx.compose.runtime.LaunchedEffect(key1 = true) {
+        val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
+        val hasSeenOnboarding = prefs.getBoolean("has_seen_onboarding", false)
+        if (!hasSeenOnboarding) {
+            showOnboardingDialog = true
+            prefs.edit().putBoolean("has_seen_onboarding", true).apply()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -100,7 +121,10 @@ fun MainScreen(
 
                 // Start / Play-knapp
                 Button(
-                    onClick = onPlayClick,
+                    onClick = {
+                        performHaptic()
+                        onPlayClick()
+                    },
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     modifier = Modifier
@@ -118,7 +142,10 @@ fun MainScreen(
 
                 // Inställningar / Settings-knapp
                 Button(
-                    onClick = onSettingsClick,
+                    onClick = {
+                        performHaptic()
+                        onSettingsClick()
+                    },
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     modifier = Modifier
@@ -137,6 +164,7 @@ fun MainScreen(
                 // Om / About-knapp
                 Button(
                     onClick = {
+                        performHaptic()
                         onButtonClick()
                         showAboutDialog = true
                     },
@@ -171,13 +199,46 @@ fun MainScreen(
                         )
                     },
                     confirmButton = {
-                        TextButton(
+                        Button(
                             onClick = {
+                                performHaptic()
                                 onButtonClick()
                                 showAboutDialog = false
-                            }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                         ) {
-                            Text("OK", style = MaterialTheme.typography.labelLarge)
+                            Text("OK", style = MaterialTheme.typography.labelLarge, color = Color.White)
+                        }
+                    }
+                )
+            }
+            
+            // Onboarding Dialog (första gången)
+            if (showOnboardingDialog) {
+                AlertDialog(
+                    onDismissRequest = { showOnboardingDialog = false },
+                    title = {
+                        Text(
+                            text = stringResource(R.string.onboarding_title),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.onboarding_message),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                performHaptic()
+                                onButtonClick()
+                                showOnboardingDialog = false
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        ) {
+                            Text(stringResource(R.string.onboarding_got_it), style = MaterialTheme.typography.labelLarge, color = Color.White)
                         }
                     }
                 )

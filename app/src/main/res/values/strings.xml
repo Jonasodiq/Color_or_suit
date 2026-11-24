@@ -72,4 +72,10 @@ Have fun!
     <string name="onboarding_message">Guess the card color or suit to earn points. Tap a color or suit button to make your guess. Good luck!</string>
     <string name="onboarding_got_it">Got it!</string>
 
+    <!-- Accessibility: Suit names -->
+    <string name="suit_hearts">Hearts</string>
+    <string name="suit_diamonds">Diamonds</string>
+    <string name="suit_clubs">Clubs</string>
+    <string name="suit_spades">Spades</string>
+
 </resources>

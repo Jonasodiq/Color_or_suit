@@ -18,6 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,6 +81,16 @@ fun MainScreen(
     val view = LocalView.current
     val context = LocalContext.current
 
+    // Pre-compute string resources for semantics
+    val playDesc = stringResource(R.string.play)
+    val settingsDesc = stringResource(R.string.settings)
+    val aboutDesc = stringResource(R.string.about)
+    val aboutGameDesc = stringResource(R.string.about_the_game)
+    val dscGameDesc = stringResource(R.string.dsc_the_game)
+    val onboardingTitleDesc = stringResource(R.string.onboarding_title)
+    val onboardingMessageDesc = stringResource(R.string.onboarding_message)
+    val onboardingGotItDesc = stringResource(R.string.onboarding_got_it)
+
     fun performHaptic() {
         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
     }
@@ -130,6 +142,10 @@ fun MainScreen(
                     modifier = Modifier
                         .width(180.dp)
                         .height(56.dp)
+                        .semantics {
+                            role = Role.Button
+                            contentDescription = playDesc
+                        }
                 ) {
                     Text(
                         text = stringResource(R.string.play),
@@ -151,6 +167,10 @@ fun MainScreen(
                     modifier = Modifier
                         .width(180.dp)
                         .height(56.dp)
+                        .semantics {
+                            role = Role.Button
+                            contentDescription = settingsDesc
+                        }
                 ) {
                     Text(
                         text = stringResource(R.string.settings),
@@ -173,6 +193,10 @@ fun MainScreen(
                     modifier = Modifier
                         .width(180.dp)
                         .height(56.dp)
+                        .semantics {
+                            role = Role.Button
+                            contentDescription = aboutDesc
+                        }
                 ) {
                     Text(
                         text = stringResource(R.string.about),
@@ -186,6 +210,7 @@ fun MainScreen(
             if (showAboutDialog) {
                 AlertDialog(
                     onDismissRequest = { showAboutDialog = false },
+                    properties = DialogProperties(usePlatformDefaultWidth = false),
                     title = {
                         Text(
                             text = stringResource(R.string.about_the_game),
@@ -195,7 +220,8 @@ fun MainScreen(
                     text = {
                         Text(
                             text = stringResource(R.string.dsc_the_game),
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.semantics { contentDescription = dscGameDesc }
                         )
                     },
                     confirmButton = {
@@ -205,7 +231,11 @@ fun MainScreen(
                                 onButtonClick()
                                 showAboutDialog = false
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .fillMaxWidth()
+                                .semantics { role = Role.Button }
                         ) {
                             Text("OK", style = MaterialTheme.typography.labelLarge, color = Color.White)
                         }
@@ -217,6 +247,7 @@ fun MainScreen(
             if (showOnboardingDialog) {
                 AlertDialog(
                     onDismissRequest = { showOnboardingDialog = false },
+                    properties = DialogProperties(usePlatformDefaultWidth = false),
                     title = {
                         Text(
                             text = stringResource(R.string.onboarding_title),
@@ -226,7 +257,8 @@ fun MainScreen(
                     text = {
                         Text(
                             text = stringResource(R.string.onboarding_message),
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.semantics { contentDescription = onboardingMessageDesc }
                         )
                     },
                     confirmButton = {
@@ -236,7 +268,11 @@ fun MainScreen(
                                 onButtonClick()
                                 showOnboardingDialog = false
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .fillMaxWidth()
+                                .semantics { role = Role.Button }
                         ) {
                             Text(stringResource(R.string.onboarding_got_it), style = MaterialTheme.typography.labelLarge, color = Color.White)
                         }

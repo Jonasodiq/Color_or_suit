@@ -6,6 +6,7 @@ import android.view.HapticFeedbackConstants
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -86,6 +88,12 @@ fun SettingsScreen(
     var selectedDifficulty by remember { mutableStateOf(prefs.getString("difficulty", "medium") ?: "medium") }
     val currentTheme = prefs.getString("theme", "light") ?: "light"
 
+    // Pre-compute string resources for semantics
+    val difficultyTitle = stringResource(R.string.difficulty_title)
+    val soundTitle = stringResource(R.string.sound_title)
+    val themeTitle = stringResource(R.string.theme_title)
+    val backDesc = stringResource(R.string.back)
+
     fun performHaptic() {
         val feedbackConstant = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             HapticFeedbackConstants.CONFIRM
@@ -110,7 +118,10 @@ fun SettingsScreen(
                         onClick = {
                             performHaptic()
                             onBackClick()
-                        }
+                        },
+                        modifier = Modifier
+                            .size(48.dp) // Minimum touch target
+                            .semantics { role = Role.Button }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -165,7 +176,21 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(44.dp)
+                                .height(56.dp) // Minimum touch target
+                                .semantics {
+                                    role = Role.RadioButton
+                                    selected = (selectedDifficulty == value)
+                                    contentDescription = label
+                                }
+                                .clickable(
+                                    enabled = true,
+                                    onClick = {
+                                        performHaptic()
+                                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
+                                        selectedDifficulty = value
+                                        prefs.edit { putString("difficulty", value) }
+                                    }
+                                )
                         ) {
                             RadioButton(
                                 selected = (selectedDifficulty == value),
@@ -174,13 +199,19 @@ fun SettingsScreen(
                                     soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
                                     selectedDifficulty = value
                                     prefs.edit { putString("difficulty", value) }
-                                }
+                                },
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .align(Alignment.CenterVertically)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(16.dp))
                             Text(
                                 text = label,
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .align(Alignment.CenterVertically)
                             )
                         }
                     }
@@ -196,7 +227,8 @@ fun SettingsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(16.dp)
+                        .height(56.dp), // Minimum touch target
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -223,7 +255,12 @@ fun SettingsScreen(
                             if (isChecked) {
                                 soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .semantics {
+                                role = Role.Switch
+                                contentDescription = soundTitle
+                            }
                     )
                 }
             }
@@ -259,7 +296,20 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(44.dp)
+                                .height(56.dp) // Minimum touch target
+                                .semantics {
+                                    role = Role.RadioButton
+                                    selected = (currentTheme == value)
+                                    contentDescription = label
+                                }
+                                .clickable(
+                                    enabled = true,
+                                    onClick = {
+                                        performHaptic()
+                                        soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
+                                        onThemeChanged(value)
+                                    }
+                                )
                         ) {
                             RadioButton(
                                 selected = (currentTheme == value),
@@ -267,13 +317,19 @@ fun SettingsScreen(
                                     performHaptic()
                                     soundManager.play(SoundManager.SoundType.BUTTON_CLICK, volume = 0.35f)
                                     onThemeChanged(value)
-                                }
+                                },
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .align(Alignment.CenterVertically)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(16.dp))
                             Text(
                                 text = label,
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .align(Alignment.CenterVertically)
                             )
                         }
                     }

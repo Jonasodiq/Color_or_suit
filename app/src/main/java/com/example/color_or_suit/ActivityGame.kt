@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -136,6 +137,45 @@ fun GameScreen(
         label = "CardFlipAnimation"
     )
 
+    // Accessibility: Announce card flip state changes
+    val cardContentDescription = remember { mutableStateOf("Card back") }
+    
+    // Pre-compute string resources for semantics to avoid calling composable functions inside semantics
+    val pointsLabel = stringResource(R.string.text_points)
+    val highScoreFormat = stringResource(R.string.high_score)
+    val scoreContentDesc = remember { mutableStateOf("$pointsLabel: ${viewModel.score}") }
+    val highScoreContentDesc = remember { mutableStateOf(highScoreFormat.replace("%1\$d", viewModel.getHighScore().toString())) }
+    
+    // Update content descriptions when score changes
+    LaunchedEffect(viewModel.score) {
+        scoreContentDesc.value = "$pointsLabel: ${viewModel.score}"
+    }
+    LaunchedEffect(viewModel.getHighScore()) {
+        highScoreContentDesc.value = highScoreFormat.replace("%1\$d", viewModel.getHighScore().toString())
+    }
+    
+    LaunchedEffect(rotation) {
+        if (rotation > 90f && rotation <= 180f) {
+            // Card is face up - announce the card
+            val card = viewModel.cards[viewModel.currentCardIndex]
+            val suit = when (card.second) {
+                "Hearts" -> "Hearts"
+                "Diamonds" -> "Diamonds"
+                "Clubs" -> "Clubs"
+                "Spades" -> "Spades"
+                else -> card.second
+            }
+            val color = when (suit) {
+                "Hearts", "Diamonds" -> "Red"
+                "Clubs", "Spades" -> "Black"
+                else -> "Unknown"
+            }
+            cardContentDescription.value = "$suit, $color"
+        } else {
+            cardContentDescription.value = "Card back"
+        }
+    }
+
     fun performHaptic() {
         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
     }
@@ -222,12 +262,18 @@ fun GameScreen(
                         rotationY = rotation
                         cameraDistance = 12f * density
                     }
+                    .semantics {
+                        // Accessibility: Treat card as an image with dynamic content description
+                        role = Role.Image
+                        stateDescription = if (isFlipped) "Card face up" else "Card face down"
+                        contentDescription = cardContentDescription.value
+                    }
             ) {
                 if (rotation <= 90f) {
                     // Kortsidan: Baksida
                     Image(
                         painter = painterResource(id = R.drawable.back),
-                        contentDescription = "Card Back",
+                        contentDescription = "",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
@@ -236,7 +282,7 @@ fun GameScreen(
                     val cardRes = viewModel.cards[viewModel.currentCardIndex].first
                     Image(
                         painter = painterResource(id = cardRes),
-                        contentDescription = "Card Front",
+                        contentDescription = "",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
@@ -269,14 +315,21 @@ fun GameScreen(
                             text = "${viewModel.score}",
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.semantics {
+                                contentDescription = scoreContentDesc.value
+                                liveRegion = LiveRegionMode.Polite
+                            }
                         )
                     }
                     // High score
                     Text(
                         text = stringResource(R.string.high_score, viewModel.getHighScore()),
                         fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.semantics {
+                            contentDescription = highScoreContentDesc.value
+                        }
                     )
                 }
                 // Floating score animation (overlay - påverkar inte layout)
@@ -299,7 +352,12 @@ fun GameScreen(
                     enabled = buttonsEnabled,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = CardRed),
-                    modifier = Modifier.size(width = 110.dp, height = 50.dp)
+                    modifier = Modifier
+                        .size(width = 110.dp, height = 56.dp) // 56dp minimum touch target
+                        .semantics {
+                            role = Role.Button
+                            stateDescription = if (buttonsEnabled) "Enabled" else "Disabled during animation"
+                        }
                 ) {
                     Text(
                         text = stringResource(R.string.red),
@@ -314,7 +372,12 @@ fun GameScreen(
                     enabled = buttonsEnabled,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = CardBlack),
-                    modifier = Modifier.size(width = 110.dp, height = 50.dp)
+                    modifier = Modifier
+                        .size(width = 110.dp, height = 56.dp) // 56dp minimum touch target
+                        .semantics {
+                            role = Role.Button
+                            stateDescription = if (buttonsEnabled) "Enabled" else "Disabled during animation"
+                        }
                 ) {
                     Text(
                         text = stringResource(R.string.black),
@@ -332,25 +395,25 @@ fun GameScreen(
             ) {
                 SuitButton(
                     iconRes = R.drawable.ic_heart,
-                    contentDesc = "Hearts",
+                    contentDesc = stringResource(R.string.suit_hearts),
                     onClick = { handleGuess("Hearts", 5) },
                     enabled = buttonsEnabled
                 )
                 SuitButton(
                     iconRes = R.drawable.ic_diamonds,
-                    contentDesc = "Diamonds",
+                    contentDesc = stringResource(R.string.suit_diamonds),
                     onClick = { handleGuess("Diamonds", 5) },
                     enabled = buttonsEnabled
                 )
                 SuitButton(
                     iconRes = R.drawable.ic_clubs,
-                    contentDesc = "Clubs",
+                    contentDesc = stringResource(R.string.suit_clubs),
                     onClick = { handleGuess("Clubs", 5) },
                     enabled = buttonsEnabled
                 )
                 SuitButton(
                     iconRes = R.drawable.ic_spades,
-                    contentDesc = "Spades",
+                    contentDesc = stringResource(R.string.suit_spades),
                     onClick = { handleGuess("Spades", 5) },
                     enabled = buttonsEnabled
                 )
@@ -363,8 +426,11 @@ fun GameScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 modifier = Modifier
                     .width(130.dp)
-                    .height(48.dp)
+                    .height(56.dp) // 56dp minimum touch target
                     .padding(bottom = 8.dp)
+                    .semantics {
+                        role = Role.Button
+                    }
             ) {
                 Text(
                     text = stringResource(R.string.back),
@@ -401,7 +467,11 @@ fun GameScreen(
                             isFlipped = false
                             showGameOverDialog = false
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                        modifier = Modifier
+                            .height(48.dp)
+                            .fillMaxWidth()
+                            .semantics { role = Role.Button }
                     ) {
                         Text(stringResource(R.string.play_again), color = Color.White)
                     }
@@ -412,7 +482,11 @@ fun GameScreen(
                             performHaptic()
                             onBackClick()
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                        modifier = Modifier
+                            .height(48.dp)
+                            .fillMaxWidth()
+                            .semantics { role = Role.Button }
                     ) {
                         Text(stringResource(R.string.exit), color = MaterialTheme.colorScheme.onErrorContainer)
                     }
@@ -487,9 +561,19 @@ fun SuitButton(
         shadowElevation = 4.dp,
         color = surfaceColor,
         modifier = Modifier
-            .size(54.dp)
+            .size(56.dp) // 56dp minimum touch target (Material Design)
             .clip(RoundedCornerShape(12.dp))
-            .clickable(enabled = enabled, onClick = onClick)
+            .clickable(
+                enabled = enabled, 
+                onClick = onClick,
+                role = Role.Button,
+                onClickLabel = contentDesc
+            )
+            .semantics {
+                role = Role.Button
+                stateDescription = if (enabled) "Enabled" else "Disabled during animation"
+                contentDescription = contentDesc
+            }
     ) {
         Box(
             modifier = Modifier
@@ -499,7 +583,7 @@ fun SuitButton(
         ) {
             Image(
                 painter = painterResource(id = iconRes),
-                contentDescription = contentDesc,
+                contentDescription = "", // Handled by parent semantics
                 modifier = Modifier.fillMaxSize()
             )
         }

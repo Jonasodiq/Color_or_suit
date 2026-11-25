@@ -26,21 +26,66 @@ val Typography = Typography(
         fontSize = 44.sp,
         letterSpacing = 1.sp
     ),
+    displayMedium = TextStyle(
+        fontFamily = KavoonFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 36.sp,
+        letterSpacing = 0.5.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = KavoonFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp,
+        letterSpacing = 0.5.sp
+    ),
     headlineMedium = TextStyle(
         fontFamily = KavoonFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
         letterSpacing = 1.sp
     ),
+    headlineSmall = TextStyle(
+        fontFamily = KavoonFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
     titleLarge = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp
     ),
+    titleMedium = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp
+    ),
+    titleSmall = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        letterSpacing = 0.1.sp
+    ),
     bodyLarge = TextStyle(
-        fontSize = 16.sp
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    bodyMedium = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    ),
+    bodySmall = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 16.sp
     ),
     labelLarge = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp
+    ),
+    labelMedium = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
+    ),
+    labelSmall = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        letterSpacing = 0.5.sp
     )
 )

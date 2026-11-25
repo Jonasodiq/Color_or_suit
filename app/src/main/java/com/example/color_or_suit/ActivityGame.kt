@@ -13,6 +13,14 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.Spring
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -26,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,8 +46,12 @@ import androidx.preference.PreferenceManager
 import com.example.color_or_suit.ui.theme.CardBlack
 import com.example.color_or_suit.ui.theme.CardRed
 import com.example.color_or_suit.ui.theme.ColorOrSuitTheme
+import com.example.color_or_suit.ui.theme.DesignSystem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
 
 class ActivityGame : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -130,12 +143,26 @@ fun GameScreen(
     // Knappar inaktiva under flip-animation (anti-spam)
     val buttonsEnabled = !isFlipped
 
-    // 3D-kortvändning via rotationY
+    // 3D-kortvändning via rotationY - improved with spring
     val rotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else 0f,
-        animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing),
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
         label = "CardFlipAnimation"
     )
+
+    // Entrance animations state
+    val titleAnim = remember { mutableStateOf(0f) }
+    val cardAnim = remember { mutableStateOf(0f) }
+    val scoreAnim = remember { mutableStateOf(0f) }
+    val colorBtnsAnim = remember { mutableStateOf(0f) }
+    val suitBtnsAnim = remember { mutableStateOf(0f) }
+    val backBtnAnim = remember { mutableStateOf(0f) }
+
+    // Density for Dp to Int conversion
+    val density = LocalDensity.current
 
     // Accessibility: Announce card flip state changes
     val cardContentDescription = remember { mutableStateOf("Card back") }
@@ -232,6 +259,40 @@ fun GameScreen(
         }
     }
 
+    // Trigger entrance animations
+    androidx.compose.runtime.LaunchedEffect(key1 = true) {
+        titleAnim.value = 1f
+        delay(DesignSystem.Motion.staggerDelay)
+        cardAnim.value = 1f
+        delay(DesignSystem.Motion.staggerDelay)
+        scoreAnim.value = 1f
+        delay(DesignSystem.Motion.staggerDelay)
+        colorBtnsAnim.value = 1f
+        delay(DesignSystem.Motion.staggerDelay)
+        suitBtnsAnim.value = 1f
+        delay(DesignSystem.Motion.staggerDelay)
+        backBtnAnim.value = 1f
+    }
+
+    // Spring animation specs for entrance - spring for float (fade/scale) and IntOffset (slide)
+    val springSpecFloat = spring<Float>(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = Spring.StiffnessLow
+    )
+    val springSpecSlide = spring<IntOffset>(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = Spring.StiffnessLow
+    )
+    val springSpecFade = spring<Float>(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = Spring.StiffnessLow
+    )
+
+    // Convert Dp offsets to pixel ints using density (for slide animations)
+    val slideOffsetTitle = with(density) { (-60.dp).roundToPx() }
+    val slideOffsetScore = with(density) { (-30.dp).roundToPx() }
+    val slideOffsetButtons = with(density) { (40.dp).roundToPx() }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background
@@ -240,258 +301,343 @@ fun GameScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
+                .padding(DesignSystem.Spacing.screenPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Rubrik
-            Text(
-                text = stringResource(R.string.colorOrSuit),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-
-            // Kortkomponent med äkta 3D rotation
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                modifier = Modifier
-                    .size(width = 140.dp, height = 210.dp)
-                    .graphicsLayer {
-                        rotationY = rotation
-                        cameraDistance = 12f * density
-                    }
-                    .semantics {
-                        // Accessibility: Treat card as an image with dynamic content description
-                        role = Role.Image
-                        stateDescription = if (isFlipped) "Card face up" else "Card face down"
-                        contentDescription = cardContentDescription.value
-                    }
+            // Rubrik + entrance animation
+            AnimatedVisibility(
+                visible = titleAnim.value > 0.5f,
+                enter = slideInVertically(
+                    initialOffsetY = { slideOffsetTitle },
+                    animationSpec = springSpecSlide
+                ) + fadeIn(animationSpec = springSpecFade),
+                exit = slideOutVertically(
+                    targetOffsetY = { slideOffsetTitle },
+                    animationSpec = springSpecSlide
+                ) + fadeOut(animationSpec = springSpecFade)
             ) {
-                if (rotation <= 90f) {
-                    // Kortsidan: Baksida
-                    Image(
-                        painter = painterResource(id = R.drawable.back),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
+                Text(
+                    text = stringResource(R.string.colorOrSuit),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = DesignSystem.Spacing.xs)
+                )
+            }
+
+            // Kortkomponent med äkta 3D rotation + entrance animation
+            AnimatedVisibility(
+                visible = cardAnim.value > 0.5f,
+                enter = fadeIn(animationSpec = springSpecFloat) + 
+                    scaleIn(
+                        initialScale = 0.8f,
+                        animationSpec = springSpecFloat
+                    ),
+                exit = fadeOut(animationSpec = springSpecFloat) + 
+                    scaleOut(
+                        targetScale = 0.8f,
+                        animationSpec = springSpecFloat
                     )
-                } else {
-                    // Kortsidan: Framsida
-                    val cardRes = viewModel.cards[viewModel.currentCardIndex].first
-                    Image(
-                        painter = painterResource(id = cardRes),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .graphicsLayer { rotationY = 180f }
-                    )
+            ) {
+                Card(
+                    shape = DesignSystem.Shape.card,
+                    elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = DesignSystem.Elevation.gameCard),
+                    modifier = Modifier
+                        .size(width = DesignSystem.Game.cardWidth, height = DesignSystem.Game.cardHeight)
+                        .graphicsLayer {
+                            rotationY = rotation
+                            cameraDistance = 12f * density.density
+                        }
+                        .semantics {
+                            // Accessibility: Treat card as an image with dynamic content description
+                            role = Role.Image
+                            stateDescription = if (isFlipped) "Card face up" else "Card face down"
+                            contentDescription = cardContentDescription.value
+                        }
+                ) {
+                    if (rotation <= 90f) {
+                        // Kortsidan: Baksida
+                        Image(
+                            painter = painterResource(id = R.drawable.back),
+                            contentDescription = "",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        // Kortsidan: Framsida
+                        val cardRes = viewModel.cards[viewModel.currentCardIndex].first
+                        Image(
+                            painter = painterResource(id = cardRes),
+                            contentDescription = "",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .graphicsLayer { rotationY = 180f }
+                        )
+                    }
                 }
             }
 
-            // Poängvisning med floating score overlay
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(Alignment.CenterVertically),
-                contentAlignment = Alignment.Center
+            // Poängvisning med floating score overlay + entrance animation
+            AnimatedVisibility(
+                visible = scoreAnim.value > 0.5f,
+                enter = slideInVertically(
+                    initialOffsetY = { slideOffsetScore },
+                    animationSpec = springSpecSlide
+                ) + fadeIn(animationSpec = springSpecFade),
+                exit = slideOutVertically(
+                    targetOffsetY = { slideOffsetScore },
+                    animationSpec = springSpecSlide
+                ) + fadeOut(animationSpec = springSpecFade)
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(Alignment.CenterVertically),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.text_points) + ": ",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                text = "${viewModel.score}",
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.semantics {
+                                    contentDescription = scoreContentDesc.value
+                                    liveRegion = LiveRegionMode.Polite
+                                }
+                            )
+                        }
+                        // High score
                         Text(
-                            text = stringResource(R.string.text_points) + ": ",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        Text(
-                            text = "${viewModel.score}",
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
+                            text = stringResource(R.string.high_score, viewModel.getHighScore()),
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.semantics {
-                                contentDescription = scoreContentDesc.value
-                                liveRegion = LiveRegionMode.Polite
+                                contentDescription = highScoreContentDesc.value
                             }
                         )
                     }
-                    // High score
-                    Text(
-                        text = stringResource(R.string.high_score, viewModel.getHighScore()),
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.semantics {
-                            contentDescription = highScoreContentDesc.value
-                        }
-                    )
-                }
-                // Floating score animation (overlay - påverkar inte layout)
-                if (pendingScoreAnimation != null) {
-                    FloatingScoreText(
-                        text = pendingScoreAnimation!!.text,
-                        color = pendingScoreAnimation!!.color,
-                        onAnimationEnd = { pendingScoreAnimation = null }
-                    )
-                }
-            }
-
-            // Färg-knappar (Röd / Svart)
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = { handleGuess("Red", 1) },
-                    enabled = buttonsEnabled,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = CardRed),
-                    modifier = Modifier
-                        .size(width = 110.dp, height = 56.dp) // 56dp minimum touch target
-                        .semantics {
-                            role = Role.Button
-                            stateDescription = if (buttonsEnabled) "Enabled" else "Disabled during animation"
-                        }
-                ) {
-                    Text(
-                        text = stringResource(R.string.red),
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                }
-
-                Button(
-                    onClick = { handleGuess("Black", 1) },
-                    enabled = buttonsEnabled,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = CardBlack),
-                    modifier = Modifier
-                        .size(width = 110.dp, height = 56.dp) // 56dp minimum touch target
-                        .semantics {
-                            role = Role.Button
-                            stateDescription = if (buttonsEnabled) "Enabled" else "Disabled during animation"
-                        }
-                ) {
-                    Text(
-                        text = stringResource(R.string.black),
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                }
-            }
-
-            // Svit-ikoner (+5 poäng)
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SuitButton(
-                    iconRes = R.drawable.ic_heart,
-                    contentDesc = stringResource(R.string.suit_hearts),
-                    onClick = { handleGuess("Hearts", 5) },
-                    enabled = buttonsEnabled
-                )
-                SuitButton(
-                    iconRes = R.drawable.ic_diamonds,
-                    contentDesc = stringResource(R.string.suit_diamonds),
-                    onClick = { handleGuess("Diamonds", 5) },
-                    enabled = buttonsEnabled
-                )
-                SuitButton(
-                    iconRes = R.drawable.ic_clubs,
-                    contentDesc = stringResource(R.string.suit_clubs),
-                    onClick = { handleGuess("Clubs", 5) },
-                    enabled = buttonsEnabled
-                )
-                SuitButton(
-                    iconRes = R.drawable.ic_spades,
-                    contentDesc = stringResource(R.string.suit_spades),
-                    onClick = { handleGuess("Spades", 5) },
-                    enabled = buttonsEnabled
-                )
-            }
-
-            // Tillbaka-knapp
-            Button(
-                onClick = onBackClick,
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                modifier = Modifier
-                    .width(130.dp)
-                    .height(56.dp) // 56dp minimum touch target
-                    .padding(bottom = 8.dp)
-                    .semantics {
-                        role = Role.Button
+                    // Floating score animation (overlay - påverkar inte layout)
+                    if (pendingScoreAnimation != null) {
+                        FloatingScoreText(
+                            text = pendingScoreAnimation!!.text,
+                            color = pendingScoreAnimation!!.color,
+                            onAnimationEnd = { pendingScoreAnimation = null }
+                        )
                     }
+                }
+            }
+
+            // Färg-knappar (Röd / Svart) + entrance animation
+            AnimatedVisibility(
+                visible = colorBtnsAnim.value > 0.5f,
+                enter = slideInVertically(
+                    initialOffsetY = { slideOffsetButtons },
+                    animationSpec = springSpecSlide
+                ) + fadeIn(animationSpec = springSpecFade),
+                exit = slideOutVertically(
+                    targetOffsetY = { slideOffsetButtons },
+                    animationSpec = springSpecSlide
+                ) + fadeOut(animationSpec = springSpecFade)
             ) {
-                Text(
-                    text = stringResource(R.string.back),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(DesignSystem.Spacing.lg),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = { handleGuess("Red", 1) },
+                        enabled = buttonsEnabled,
+                        shape = DesignSystem.Shape.button,
+                        colors = ButtonDefaults.buttonColors(containerColor = CardRed),
+                        modifier = Modifier
+                            .size(width = 110.dp, height = DesignSystem.TouchTarget.comfortable)
+                            .semantics {
+                                role = Role.Button
+                                stateDescription = if (buttonsEnabled) "Enabled" else "Disabled during animation"
+                            }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.red),
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    }
+
+                    Button(
+                        onClick = { handleGuess("Black", 1) },
+                        enabled = buttonsEnabled,
+                        shape = DesignSystem.Shape.button,
+                        colors = ButtonDefaults.buttonColors(containerColor = CardBlack),
+                        modifier = Modifier
+                            .size(width = 110.dp, height = DesignSystem.TouchTarget.comfortable)
+                            .semantics {
+                                role = Role.Button
+                                stateDescription = if (buttonsEnabled) "Enabled" else "Disabled during animation"
+                            }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.black),
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
+
+            // Svit-ikoner (+5 poäng) + entrance animation
+            AnimatedVisibility(
+                visible = suitBtnsAnim.value > 0.5f,
+                enter = slideInVertically(
+                    initialOffsetY = { slideOffsetButtons },
+                    animationSpec = springSpecSlide
+                ) + fadeIn(animationSpec = springSpecFade),
+                exit = slideOutVertically(
+                    targetOffsetY = { slideOffsetButtons },
+                    animationSpec = springSpecSlide
+                ) + fadeOut(animationSpec = springSpecFade)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(DesignSystem.Spacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SuitButton(
+                        iconRes = R.drawable.ic_heart,
+                        contentDesc = stringResource(R.string.suit_hearts),
+                        onClick = { handleGuess("Hearts", 5) },
+                        enabled = buttonsEnabled
+                    )
+                    SuitButton(
+                        iconRes = R.drawable.ic_diamonds,
+                        contentDesc = stringResource(R.string.suit_diamonds),
+                        onClick = { handleGuess("Diamonds", 5) },
+                        enabled = buttonsEnabled
+                    )
+                    SuitButton(
+                        iconRes = R.drawable.ic_clubs,
+                        contentDesc = stringResource(R.string.suit_clubs),
+                        onClick = { handleGuess("Clubs", 5) },
+                        enabled = buttonsEnabled
+                    )
+                    SuitButton(
+                        iconRes = R.drawable.ic_spades,
+                        contentDesc = stringResource(R.string.suit_spades),
+                        onClick = { handleGuess("Spades", 5) },
+                        enabled = buttonsEnabled
+                    )
+                }
+            }
+
+            // Tillbaka-knapp + entrance animation
+            AnimatedVisibility(
+                visible = backBtnAnim.value > 0.5f,
+                enter = slideInVertically(
+                    initialOffsetY = { slideOffsetButtons },
+                    animationSpec = springSpecSlide
+                ) + fadeIn(animationSpec = springSpecFade),
+                exit = slideOutVertically(
+                    targetOffsetY = { slideOffsetButtons },
+                    animationSpec = springSpecSlide
+                ) + fadeOut(animationSpec = springSpecFade)
+            ) {
+                Button(
+                    onClick = onBackClick,
+                    shape = DesignSystem.Shape.button,
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(DesignSystem.TouchTarget.comfortable)
+                        .padding(bottom = DesignSystem.Spacing.xs)
+                        .semantics {
+                            role = Role.Button
+                        }
+                ) {
+                    Text(
+                        text = stringResource(R.string.back),
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
             }
         }
 
         // Vinst / Förlust Dialog
         if (showGameOverDialog) {
-            AlertDialog(
-                onDismissRequest = { /* Lås så man måste välja knapp */ },
-                title = {
-                    Text(
-                        text = stringResource(R.string.game_over_title),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
-                text = {
-                    val message = if (isWin) {
-                        stringResource(R.string.win_message, viewModel.score)
-                    } else {
-                        stringResource(R.string.lose_message)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics { contentDescription = "" }
+            ) {
+                AlertDialog(
+                    onDismissRequest = { /* Lås så man måste välja knapp */ },
+                    title = {
+                        Text(
+                            text = stringResource(R.string.game_over_title),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    text = {
+                        val message = if (isWin) {
+                            stringResource(R.string.win_message, viewModel.score)
+                        } else {
+                            stringResource(R.string.lose_message)
+                        }
+                        Text(text = message, style = MaterialTheme.typography.bodyLarge)
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                performHaptic()
+                                viewModel.resetGame()
+                                isFlipped = false
+                                showGameOverDialog = false
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .fillMaxWidth()
+                                .semantics { role = Role.Button }
+                        ) {
+                            Text(stringResource(R.string.play_again), color = Color.White)
+                        }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = {
+                                performHaptic()
+                                onBackClick()
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .fillMaxWidth()
+                                .semantics { role = Role.Button }
+                        ) {
+                            Text(stringResource(R.string.exit), color = MaterialTheme.colorScheme.onErrorContainer)
+                        }
                     }
-                    Text(text = message, style = MaterialTheme.typography.bodyLarge)
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            performHaptic()
-                            viewModel.resetGame()
-                            isFlipped = false
-                            showGameOverDialog = false
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                        modifier = Modifier
-                            .height(48.dp)
-                            .fillMaxWidth()
-                            .semantics { role = Role.Button }
-                    ) {
-                        Text(stringResource(R.string.play_again), color = Color.White)
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            performHaptic()
-                            onBackClick()
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
-                        modifier = Modifier
-                            .height(48.dp)
-                            .fillMaxWidth()
-                            .semantics { role = Role.Button }
-                    ) {
-                        Text(stringResource(R.string.exit), color = MaterialTheme.colorScheme.onErrorContainer)
-                    }
+                )
+
+                // Confetti overlay - only on win
+                if (isWin) {
+                    ConfettiOverlay(visible = true)
                 }
-            )
+            }
         }
     }
 }
@@ -506,17 +652,27 @@ fun FloatingScoreText(
     val scope = rememberCoroutineScope()
     val animatedOffsetY by animateFloatAsState(
         targetValue = -80f,
-        animationSpec = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
+        animationSpec = tween(
+            durationMillis = DesignSystem.Game.scoreAnimationDuration,
+            easing = FastOutSlowInEasing
+        ),
         label = "FloatingScoreY"
     )
     val animatedAlpha by animateFloatAsState(
         targetValue = 0f,
-        animationSpec = tween(durationMillis = 1200, delayMillis = 200, easing = FastOutSlowInEasing),
+        animationSpec = tween(
+            durationMillis = DesignSystem.Game.scoreAnimationDuration,
+            delayMillis = 200,
+            easing = FastOutSlowInEasing
+        ),
         label = "FloatingScoreAlpha"
     )
     val animatedScale by animateFloatAsState(
         targetValue = 1.2f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
         label = "FloatingScoreScale"
     )
 
@@ -557,12 +713,12 @@ fun SuitButton(
     val surfaceColor = MaterialTheme.colorScheme.surfaceContainerHighest
     
     Surface(
-        shape = RoundedCornerShape(12.dp),
-        shadowElevation = 4.dp,
+        shape = DesignSystem.Shape.suitButton,
+        shadowElevation = DesignSystem.TouchTarget.suitButton, // Use as elevation reference
         color = surfaceColor,
         modifier = Modifier
-            .size(56.dp) // 56dp minimum touch target (Material Design)
-            .clip(RoundedCornerShape(12.dp))
+            .size(DesignSystem.TouchTarget.suitButton) // 56dp minimum touch target (Material Design)
+            .clip(DesignSystem.Shape.suitButton)
             .clickable(
                 enabled = enabled, 
                 onClick = onClick,
@@ -578,7 +734,7 @@ fun SuitButton(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp),
+                .padding(DesignSystem.Spacing.sm),
             contentAlignment = Alignment.Center
         ) {
             Image(

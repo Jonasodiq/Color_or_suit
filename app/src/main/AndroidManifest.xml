@@ -16,13 +16,16 @@
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/settings"
-            android:theme="@style/Theme.Color_or_suit"/>
+            android:theme="@style/Theme.Color_or_suit"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ActivityGame"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
